@@ -17,6 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('exam_id')->constrained()->onDelete('cascade');
             $table->text('question_text');
+            $table->integer('order')->default(0);
+            $table->enum('question_type', ['multiple_choice', 'essay'])->default('multiple_choice');
+            $table->float('weight')->default(1);
             $table->timestamps();
         });
     }
