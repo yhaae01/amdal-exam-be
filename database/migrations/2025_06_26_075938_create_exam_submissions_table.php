@@ -12,9 +12,14 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('exam_submissions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('exam_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+
+            $table->uuid('exam_id');
+            $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
+
+            $table->uuid('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            
             $table->timestamp('started_at')->nullable();
             $table->timestamp('submitted_at')->nullable();
             $table->float('score')->nullable();
