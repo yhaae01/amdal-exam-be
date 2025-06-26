@@ -15,14 +15,25 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
+    // 📚 CRUD Exam (ujian)
     Route::apiResource('exams', ExamController::class);
+
+    // ❓ CRUD Question (soal)
     Route::apiResource('questions', QuestionController::class);
+
+    // 🔘 CRUD Option (pilihan jawaban)
     Route::apiResource('options', OptionController::class);
 
-    Route::post('/exam-submissions/start', [ExamSubmissionController::class, 'start']);
-    Route::post('/exam-submissions/{submission}/submit', [ExamSubmissionController::class, 'submit']);
-    Route::get('/exam-submissions/{submission}', [ExamSubmissionController::class, 'show']);
-    Route::get('/my-submissions', [ExamSubmissionController::class, 'index']);
+    // 📝 Submit ujian
+    Route::post('/exam-submissions/start', [ExamSubmissionController::class, 'start']); // Mulai ujian
+    Route::post('/exam-submissions/{submission}/submit', [ExamSubmissionController::class, 'submit']); // Submit ujian
+    Route::get('/exam-submissions/{submission}', [ExamSubmissionController::class, 'show']); // Lihat detail ujian yang sudah dikerjakan
+    Route::get('/my-submissions', [ExamSubmissionController::class, 'index']); // Daftar semua submission user
 
-    Route::apiResource('answers', AnswerController::class)->only(['store', 'update', 'show']);
+    // ✏️ Jawaban user (simpan/update satu soal)
+    Route::apiResource('answers', AnswerController::class)->only([
+        'store', // Simpan atau update jawaban (jika sudah pernah dijawab)
+        'update', // Update jawaban
+        'show'    // Lihat jawaban
+    ]);
 });
