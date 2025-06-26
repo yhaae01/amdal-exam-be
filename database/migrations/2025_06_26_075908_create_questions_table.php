@@ -14,8 +14,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('questions', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('exam_id')->constrained()->onDelete('cascade');
+            $table->uuid('id')->primary();
+            
+            $table->uuid('exam_id');
+            $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
+
             $table->text('question_text');
             $table->integer('order')->default(0);
             $table->enum('question_type', ['multiple_choice', 'essay'])->default('multiple_choice');

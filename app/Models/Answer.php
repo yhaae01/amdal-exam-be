@@ -12,6 +12,8 @@ class Answer extends Model
         'selected_option_id',
         'answer_text'
     ];
+    public $incrementing = false;
+    protected $keyType = 'string';
     
     public function exam_submission()
     {
