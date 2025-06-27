@@ -19,17 +19,19 @@ class AuthController extends Controller
             return apiResponse(null, 'login failed, email or password does not match', false, 401);
         }
 
+        $user = auth()->user();
+        
+        $batchUser = ExamBatchUser::with('examBatch')->where('user_id', $user->id)->first();
+                
+        $user->batch = $batchUser->examBatch->name       ?? null;
+        $user->start_time = $batchUser->examBatch->start_time ?? null;
+        $user->end_time = $batchUser->examBatch->end_time   ?? null;
+
         $data = [
             'access_token' => $token,
             'token_type'   => 'bearer',
-            'user'         => auth()->user()
+            'user'         => $user
         ];
-
-        $batchUser = ExamBatchUser::with('examBatch')->where('user_id', auth()->user()->id)->first();
-                
-        $data['batch']      = $batchUser->examBatch->name       ?? null;
-        $data['start_time'] = $batchUser->examBatch->start_time ?? null;
-        $data['end_time']   = $batchUser->examBatch->end_time   ?? null;
 
         return apiResponse($data, 'login successful', true, 200);
     }
@@ -48,14 +50,12 @@ class AuthController extends Controller
     {
         $batchUser = ExamBatchUser::with('examBatch')->where('user_id', auth()->user()->id)->first();
                
-        $data = [
-            'user' => auth()->user()
-        ];
+        $user = auth()->user();
 
-        $data['batch']      = $batchUser->examBatch->name       ?? null;
-        $data['start_time'] = $batchUser->examBatch->start_time ?? null;
-        $data['end_time']   = $batchUser->examBatch->end_time   ?? null;
+        $user->batch = $batchUser->examBatch->name       ?? null;
+        $user->start_time = $batchUser->examBatch->start_time ?? null;
+        $user->end_time = $batchUser->examBatch->end_time   ?? null;
 
-        return apiResponse($data, 'success in obtaining personal information', true, 200);
+        return apiResponse($user, 'success in obtaining personal information', true, 200);
     }
 }
