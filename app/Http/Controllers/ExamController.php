@@ -22,12 +22,12 @@ class ExamController extends Controller
              // tidak difilter user
             $isAdmin = auth()->user()->role === 'admin';
 
-            $with = [
-                'questions.options',
-                'questions.answers.examSubmission'
-            ];
+            // $with = [
+            //     // 'questions.options',
+            //     // 'questions.answers.examSubmission'
+            // ];
 
-            $query = Exam::with($with);
+            $query = Exam::withCount('questions');
 
             $exams = $isAdmin ? $query->paginate(10) : $query->get();
 

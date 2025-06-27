@@ -11,11 +11,11 @@ use App\Http\Controllers\ExamSubmissionController;
 use App\Http\Controllers\ExamBatchController;
 
 Route::post('/login', [AuthController::class, 'login']);
-// Get all exams with questions and user answers
-Route::get('/exams/all', [ExamController::class, 'getAllExams']);
 
 Route::middleware(['auth:api'])->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
+    // Get all exams with questions and user answers
+    Route::get('/exams/all', [ExamController::class, 'getAllExams']);
+    Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
     // 📚 CRUD Exam (ujian)
