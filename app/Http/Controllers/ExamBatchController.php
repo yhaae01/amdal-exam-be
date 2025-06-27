@@ -11,7 +11,17 @@ class ExamBatchController extends Controller
 {
     public function index()
     {
-        return ExamBatch::with('exam')->paginate(10);
+        if (auth()->user()->role !== 'admin') {
+            return response()->json([
+                'message' => 'Forbidden.'
+            ], 403);
+        }
+
+        $examBatches = ExamBatch::with('exam')->paginate(10);
+
+        return response()->json([
+            'data' => $examBatches
+        ], 200);
     }
 
     public function store(Request $request)

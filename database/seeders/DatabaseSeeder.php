@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             ExamSeeder::class,
-            ExamBatchSeeder::class,
-            ExamAnswerSeeder::class,
+            // ExamBatchSeeder::class,
+            // ExamAnswerSeeder::class,
         ]);
     }
 }
