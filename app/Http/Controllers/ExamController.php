@@ -16,7 +16,7 @@ class ExamController extends Controller
         return apiResponse($exams, 'success in obtaining exams', true, 200);
     }
 
-    public function getAllExams()
+    public function getAllExams(Request $request)
     {
         try {
              // tidak difilter user
@@ -28,6 +28,12 @@ class ExamController extends Controller
             // ];
 
             $query = Exam::withCount('questions');
+            
+            $search = $request->query('search');
+            if ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            }
 
             $exams = $isAdmin ? $query->paginate(10) : $query->get();
 

@@ -14,9 +14,18 @@ class QuestionController extends Controller
         if (auth()->user()->role !== 'admin') {
             return apiResponse(null, 'forbidden', false, 403);
         }
-
-        $questions = Question::with('options')->orderBy('order')->paginate(10);
-
+    
+        $search = $request->query('search');
+    
+        $query = Question::with('options')->orderBy('order');
+    
+        if ($search) {
+            $query->where('question_text', 'like', '%' . $search . '%')
+                ->orWhere('question_type', 'like', '%' . $search . '%');
+        }
+    
+        $questions = $query->paginate(10);
+    
         return apiResponse($questions, 'success in obtaining questions', true, 200);
     }
 

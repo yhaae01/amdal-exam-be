@@ -4,11 +4,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\ExamSubmissionController;
 use App\Http\Controllers\ExamBatchController;
+use App\Http\Controllers\ExamSubmissionController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -46,4 +47,12 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/exam-batches/{id}', [ExamBatchController::class, 'show']);
     Route::delete('/exam-batches/{id}', [ExamBatchController::class, 'destroy']);
     Route::post('/exam-batches/{id}/assign-users', [ExamBatchController::class, 'assignUsers']);
+
+    // 👤 Manajemen User
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/users', [UserController::class, 'index']);
+        Route::post('/users', [UserController::class, 'store']);
+        Route::put('/users/{id}', [UserController::class, 'update']);
+        Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    });
 });
