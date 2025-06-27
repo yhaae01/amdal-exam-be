@@ -20,10 +20,16 @@ class ExamController extends Controller
     {
         try {
              // tidak difilter user
-            $exams = Exam::with([
+            $isAdmin = auth()->user()->role === 'admin';
+
+            $with = [
                 'questions.options',
                 'questions.answers.examSubmission'
-            ])->paginate(10);
+            ];
+
+            $query = Exam::with($with);
+
+            $exams = $isAdmin ? $query->paginate(10) : $query->get();
 
             // jika ingin mengambil data ujian yang sudah dikerjakan oleh user
             // $exams = Exam::with([
