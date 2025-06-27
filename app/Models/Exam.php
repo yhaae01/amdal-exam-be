@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Exam extends Model
 {
+    use HasUuids;
     protected $fillable = [
         'title',
         'description',
@@ -13,19 +15,6 @@ class Exam extends Model
         'question_type',
         'duration'
     ];
-    public $incrementing = false;
-    protected $keyType = 'string';
-    
-    protected static function boot()
-    {
-        parent::boot();
-    
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) \Illuminate\Support\Str::uuid();
-            }
-        });
-    }
     
     public function getRouteKeyName()
     {
@@ -40,5 +29,10 @@ class Exam extends Model
     public function submissions()
     {
         return $this->hasMany(ExamSubmission::class);
+    }
+    
+    public function batches()
+    {
+        return $this->hasMany(ExamBatch::class);
     }
 }

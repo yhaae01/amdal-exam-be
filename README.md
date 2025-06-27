@@ -1,4 +1,3 @@
-
 # 📝 SITERAL
 
 SITERAL (Sistem Informasi Seleksi Tenaga Teknis Operasional Amdalnet) merupakan sistem informasi ujian online berbasis web menggunakan Laravel 12 (backend), PostgreSQL (database), dan React + Vite (frontend).
@@ -25,11 +24,10 @@ SITERAL (Sistem Informasi Seleksi Tenaga Teknis Operasional Amdalnet) merupakan 
 
 > Token JWT harus dikirim di header:
 
-```http
+`http
 Authorization: Bearer <TOKEN>
-```
+`
 
----
 
 ### 2. Manajemen Ujian (Admin)
 
@@ -57,14 +55,22 @@ Authorization: Bearer <TOKEN>
 - `PUT /api/v1/options/{id}`
 - `DELETE /api/v1/options/{id}`
 
----
+#### 🗓️ Exam Batch (Sesi Ujian)
+
+- `GET /api/v1/exam-batches` – Daftar semua batch ujian
+- `POST /api/v1/exam-batches` – Buat batch ujian
+- `GET /api/v1/exam-batches/{id}` – Detail batch
+- `DELETE /api/v1/exam-batches/{id}` – Hapus batch
+- `POST /api/v1/exam-batches/{id}/assign-users` – Assign user ke batch tertentu
+
 
 ### 3. Pelaksanaan Ujian (User)
 
 #### 🟢 Mulai Ujian
 
 - `POST /api/v1/exam-submissions/start`
-  - Body: `{ "exam_id": 1 }`
+  - Body: `{ "exam_id": "<uuid>", "exam_batch_id": "<uuid>" }`
+  - Hanya bisa dijalankan jika waktu batch aktif dan user terdaftar di batch tersebut
 
 #### ✏️ Jawab Soal
 
@@ -89,6 +95,8 @@ Authorization: Bearer <TOKEN>
 - **exams** – daftar ujian
 - **questions** – daftar soal ujian
 - **options** – pilihan jawaban soal
+- **exam_batches** – daftar sesi/batch ujian
+- **exam_batch_user** – pivot user yang terdaftar di sesi tertentu
 - **exam_submissions** – data pengerjaan ujian oleh user
 - **answers** – jawaban dari setiap soal dalam ujian
 
@@ -99,6 +107,7 @@ Authorization: Bearer <TOKEN>
 - Soal dan opsi bisa memiliki gambar (`image`) yang disimpan di `storage/app/public`
 - Field `is_correct` disembunyikan dari API response untuk menjaga integritas ujian
 - Soal bisa berupa pilihan ganda (`multiple_choice`) atau esai (`essay`)
+- Pelaksanaan ujian dibatasi berdasarkan waktu sesi/batch yang ditentukan oleh admin
 
 ---
 

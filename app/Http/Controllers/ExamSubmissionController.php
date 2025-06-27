@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExamBatch;
 use Illuminate\Http\Request;
 use App\Models\ExamSubmission;
 use Illuminate\Support\Facades\Log;
@@ -18,22 +19,66 @@ class ExamSubmissionController extends Controller
     public function start(Request $request)
     {
         try {
+            // ✅ Cek: hanya user role 'user' yang boleh ikut ujian
+            if (auth()->user()->role !== 'user') {
+                return response()->json([
+                    'message' => 'Hanya peserta (user) yang boleh mengikuti ujian.'
+                ], 403);
+            }
+            
             $request->validate([
-                'exam_id' => 'required|exists:exams,id'
+                'exam_id'       => 'required|exists:exams,id',
+                'exam_batch_id' => 'required|exists:exam_batches,id',
             ]);
     
+            $user = auth()->user();
+    
+            $batch = ExamBatch::findOrFail($request->exam_batch_id);
+    
+            // ✅ Pastikan batch cocok dengan exam
+            if ($batch->exam_id !== $request->exam_id) {
+                return response()->json([
+                    'message' => 'Batch tidak sesuai dengan ujian.'
+                ], 400);
+            }
+    
+            // ✅ Cek user terdaftar di batch
+            if (!$user->examBatches->contains($batch->id)) {
+                return response()->json([
+                    'message' => 'Kamu tidak terdaftar di batch ini.'
+                ], 403);
+            }
+    
+            // ✅ Validasi waktu sesi
+            $now = now();
+            if ($now->lt($batch->start_time)) {
+                return response()->json([
+                    'message' => 'Belum waktunya ujian dimulai.'
+                ], 403);
+            }
+            if ($now->gt($batch->end_time)) {
+                return response()->json([
+                    'message' => 'Waktu ujian pada batch ini telah berakhir.'
+                ], 403);
+            }
+    
+            // ✅ Cek apakah user sudah pernah ikut
             $existing = ExamSubmission::where('exam_id', $request->exam_id)
-                ->where('user_id', auth()->id())
+                ->where('user_id', $user->id)
                 ->first();
     
             if ($existing) {
-                return response()->json(['message' => 'Ujian sudah pernah dikerjakan.'], 409);
+                return response()->json([
+                    'message' => 'Ujian sudah pernah dikerjakan.'
+                ], 409);
             }
     
+            // ✅ Buat submission
             $submission = ExamSubmission::create([
-                'exam_id'   => $request->exam_id,
-                'user_id'   => auth()->id(),
-                'started_at' => now(),
+                'exam_id'       => $request->exam_id,
+                'exam_batch_id' => $batch->id,
+                'user_id'       => $user->id,
+                'started_at'    => $now,
             ]);
     
             return response()->json($submission, 201);

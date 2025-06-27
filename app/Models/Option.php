@@ -3,27 +3,17 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Option extends Model
 {
+    use HasUuids;
     protected $fillable = [
         'question_id',
         'option_text',
         'is_correct'
     ];
     protected $hidden = ['is_correct'];
-    public $incrementing = false;
-    protected $keyType = 'string';
-    protected static function boot()
-    {
-        parent::boot();
-    
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) \Illuminate\Support\Str::uuid();
-            }
-        });
-    }
 
     public function question()
     {
