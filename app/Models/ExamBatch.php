@@ -30,4 +30,9 @@ class ExamBatch extends Model
     {
         return $this->belongsToMany(User::class, 'exam_batch_user');
     }
+
+    public function examBatchUsers()
+    {
+        return $this->hasMany(ExamBatchUser::class);
+    }
 }

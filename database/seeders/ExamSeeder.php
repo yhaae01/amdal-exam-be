@@ -3,10 +3,14 @@
 namespace Database\Seeders;
 
 use App\Models\Exam;
+use App\Models\ExamBatch;
+use App\Models\ExamBatchUser;
 use App\Models\Option;
 use App\Models\Question;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\Hash;
 
 class ExamSeeder extends Seeder
 {
@@ -188,6 +192,47 @@ class ExamSeeder extends Seeder
             'is_correct'  => false
         ]);
 
+        // Add user in batch
+        $exam_batch1 = ExamBatch::create([
+            'exam_id' => $exam1->id,
+            'name'    => 'Batch 1',
+            'start_time' => now(),
+            'end_time' => now()->addMinutes(60),
+            'max_participants' => 50
+        ]);
+
+        $exam_batch2 = ExamBatch::create([
+            'exam_id' => $exam1->id,
+            'name'    => 'Batch 2',
+            'start_time' => now()->addMinutes(60),
+            'end_time' => now()->addMinutes(120),
+        ]);
+        
+        $user1 = User::create([
+            'name'      => 'User 1',
+            'email'     => 'user1@example.com',
+            'password'  => Hash::make('password'),
+            'role'      => 'user',
+            'is_active' => true,
+        ]);
+
+        $user2 = User::create([
+            'name'      => 'User 2',
+            'email'     => 'user2@example.com',
+            'password'  => Hash::make('password'),
+            'role'      => 'user',
+            'is_active' => true,
+        ]);
+
+        $user_exam1 = ExamBatchUser::create([
+            'exam_batch_id' => $exam_batch1->id,
+            'user_id' => $user1->id
+        ]);
+
+        $user_exam2 = ExamBatchUser::create([
+            'exam_batch_id' => $exam_batch2->id,
+            'user_id' => $user2->id
+        ]);
         // $examTitles = [
         //     'Ujian Tenaga Teknis Uji Administrasi' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi.',
         //     'Ujian Tenaga Teknis Helpdesk Amdalnet' => 'Ujian Online untuk calon Tenaga Teknis Helpdesk Amdalnet.',

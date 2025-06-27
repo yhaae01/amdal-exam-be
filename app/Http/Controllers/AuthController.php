@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ExamBatchUser;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
@@ -24,6 +25,12 @@ class AuthController extends Controller
             'user'         => auth()->user()
         ];
 
+        $batchUser = ExamBatchUser::with('examBatch')->where('user_id', auth()->user()->id)->first();
+                
+        $data['batch']      = $batchUser->examBatch->name       ?? null;
+        $data['start_time'] = $batchUser->examBatch->start_time ?? null;
+        $data['end_time']   = $batchUser->examBatch->end_time   ?? null;
+
         return apiResponse($data, 'login successful', true, 200);
     }
 
@@ -39,6 +46,16 @@ class AuthController extends Controller
 
     public function me()
     {
-        return apiResponse(auth()->user(), 'success in obtaining personal information', true, 200);
+        $batchUser = ExamBatchUser::with('examBatch')->where('user_id', auth()->user()->id)->first();
+               
+        $data = [
+            'user' => auth()->user()
+        ];
+
+        $data['batch']      = $batchUser->examBatch->name       ?? null;
+        $data['start_time'] = $batchUser->examBatch->start_time ?? null;
+        $data['end_time']   = $batchUser->examBatch->end_time   ?? null;
+
+        return apiResponse($data, 'success in obtaining personal information', true, 200);
     }
 }

@@ -80,4 +80,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    public function examBatchUsers()
+    {
+        return $this->hasOne(ExamBatchUser::class);
+    }
 }
