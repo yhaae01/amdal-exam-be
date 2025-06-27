@@ -16,7 +16,9 @@ class OptionController extends Controller
     
         $options = Option::where('question_id', $request->question_id)->get();
     
-        return response()->json(['data' => $options]);
+        return response()->json([
+            'data' => $options
+        ], 200);
     }
 
     public function store(Request $request)

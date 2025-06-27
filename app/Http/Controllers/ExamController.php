@@ -11,11 +11,43 @@ class ExamController extends Controller
 {
     public function index()
     {
-        $exams = Exam::withCount('questions')->get();
+        $exams = Exam::withCount('questions')->paginate(10);
 
         return response()->json([
             'data' => $exams
-        ]);
+        ], 200);
+    }
+
+    public function getAllExams()
+    {
+        try {
+             // tidak difilter user
+            $exams = Exam::with([
+                'questions.options',
+                'questions.answers.examSubmission'
+            ])->paginate(10);
+
+            // jika ingin mengambil data ujian yang sudah dikerjakan oleh user
+            // $exams = Exam::with([
+            //     'questions.options',
+            //     'questions.answers' => function ($q) {
+            //         $q->whereHas('examSubmission', function ($q2) {
+            //             $q2->where('user_id', auth()->id());
+            //         });
+            //     }
+            // ])->get();
+
+            return response()->json([
+                'data' => $exams
+            ], 200);
+        } catch (\Exception $e) {
+            Log::error('Gagal mengambil semua data ujian: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'Gagal mengambil data ujian lengkap.',
+                'error'   => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function store(Request $request)
@@ -56,7 +88,7 @@ class ExamController extends Controller
             $exam = Exam::with([
                 'questions.options',
                 'questions.answers' => function ($q) {
-                    $q->whereHas('exam_submission', function ($q2) {
+                    $q->whereHas('examSubmission', function ($q2) {
                         $q2->where('user_id', auth()->id());
                     });
                 }

@@ -3,29 +3,20 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Concerns\HasUuids;
 
 class Answer extends Model
 {
+    use HasUuids;
+    protected $with = ['examSubmission'];
     protected $fillable = [
         'exam_submission_id',
         'question_id',
         'selected_option_id',
         'answer_text'
     ];
-    public $incrementing = false;
-    protected $keyType = 'string';
-    protected static function boot()
-    {
-        parent::boot();
     
-        static::creating(function ($model) {
-            if (empty($model->{$model->getKeyName()})) {
-                $model->{$model->getKeyName()} = (string) \Illuminate\Support\Str::uuid();
-            }
-        });
-    }
-    
-    public function exam_submission()
+    public function examSubmission()
     {
         return $this->belongsTo(ExamSubmission::class);
     }

@@ -20,7 +20,9 @@ class QuestionController extends Controller
             ->orderBy('order')
             ->get();
     
-        return response()->json(['data' => $questions]);
+        return response()->json([
+            'data' => $questions
+        ], 200);
     }
 
     public function store(Request $request)
