@@ -12,16 +12,12 @@ class QuestionController extends Controller
     public function index(Request $request)
     {
         if (auth()->user()->role !== 'admin') {
-            return response()->json([
-                'message' => 'Forbidden.'
-            ], 403);
+            return apiResponse(null, 'forbidden', false, 403);
         }
 
         $questions = Question::with('options')->orderBy('order')->paginate(10);
 
-        return response()->json([
-            'data' => $questions
-        ], 200);
+        return apiResponse($questions, 'success in obtaining questions', true, 200);
     }
 
     public function store(Request $request)
@@ -43,17 +39,10 @@ class QuestionController extends Controller
     
             $question = Question::create($validated);
     
-            return response()->json([
-                'message' => 'Soal berhasil ditambahkan.',
-                'data' => $question
-            ], 201);
-    
+            return apiResponse($question, 'success in creating question', true, 201);
         } catch (\Exception $e) {
-            Log::error('Gagal menyimpan soal: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'Gagal menyimpan soal.',
-                'error'   => $e->getMessage()
-            ], 500);
+            Log::error('failed to save question: ' . $e->getMessage());
+            return apiResponse(null, 'failed to save question.', false, 500);
         }
     }
 
@@ -61,16 +50,11 @@ class QuestionController extends Controller
     {
         try {
             $question->load(['options', 'answers']);
-            return response()->json([
-                'data' => $question
-            ]);
+            return apiResponse($question, 'success in obtaining question', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal menampilkan question: ' . $e->getMessage());
+            Log::error('failed to retrieve question data: ' . $e->getMessage());
     
-            return response()->json([
-                'message' => 'Gagal mengambil data soal.',
-                'error'   => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to retrieve question data.', false, 500);
         }
     }
 
@@ -95,17 +79,11 @@ class QuestionController extends Controller
     
             $question->update($validated);
     
-            return response()->json([
-                'message' => 'Soal berhasil diperbarui.',
-                'data' => $question
-            ]);
-    
+            return apiResponse($question, 'success in updating question', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal mengupdate soal: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'Gagal mengupdate soal.',
-                'error'   => $e->getMessage()
-            ], 500);
+            Log::error('failed to update questions: ' . $e->getMessage());
+
+            return apiResponse(null, 'failed to update questions.', false, 500);
         }
     }
 
@@ -118,16 +96,11 @@ class QuestionController extends Controller
     
             $question->delete();
     
-            return response()->json([
-                'message' => 'Soal berhasil dihapus.'
-            ]);
-    
+            return apiResponse(null, 'success in deleting question', true, 200);    
         } catch (\Exception $e) {
-            Log::error('Gagal menghapus soal: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'Gagal menghapus soal.',
-                'error'   => $e->getMessage()
-            ], 500);
+            Log::error('failed to delete question: ' . $e->getMessage());
+
+            return apiResponse(null, 'failed to delete question.', false, 500);
         }
     }
 }

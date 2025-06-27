@@ -16,9 +16,7 @@ class OptionController extends Controller
     
         $options = Option::where('question_id', $request->question_id)->get();
     
-        return response()->json([
-            'data' => $options
-        ], 200);
+        return apiResponse($options, 'success in obtaining options', true, 200);
     }
 
     public function store(Request $request)
@@ -32,35 +30,22 @@ class OptionController extends Controller
     
             $option = Option::create($validated);
     
-            return response()->json([
-                'message' => 'Opsi berhasil ditambahkan.',
-                'data' => $option
-            ], 201);
-            
+            return apiResponse($option, 'option created successfully', true, 201);
         } catch (\Exception $e) {
-            Log::error('Gagal membuat option: ' . $e->getMessage());
+            Log::error('failed to create option: ' . $e->getMessage());
     
-            return response()->json([
-                'message' => 'Gagal menyimpan opsi jawaban.',
-                'error' => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to create option', false, 500);
         }
     }
 
     public function show(Option $option)
     {
         try {
-            return response()->json([
-                'message' => 'Opsi berhasil diperbarui.',
-                'data' => $option
-            ]);
+            return apiResponse($option, 'success in obtaining option', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal menampilkan option: ' . $e->getMessage());
+            Log::error('failed to display options: ' . $e->getMessage());
     
-            return response()->json([
-                'message' => 'Gagal mengambil data opsi.',
-                'error' => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to display options.', false, 500);
         }
     }
 
@@ -74,15 +59,11 @@ class OptionController extends Controller
     
             $option->update($validated);
     
-            return response()->json($option);
-    
+            return apiResponse($option, 'option updated successfully', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal update option: ' . $e->getMessage());
+            Log::error('failed to update option: ' . $e->getMessage());
     
-            return response()->json([
-                'message' => 'Gagal mengupdate opsi.',
-                'error' => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to update option.', false, 500);
         }
     }
 
@@ -91,15 +72,11 @@ class OptionController extends Controller
         try {
             $option->delete();
     
-            return response()->json(['message' => 'Option deleted']);
-    
+            return apiResponse(null, 'option deleted successfully', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal menghapus option: ' . $e->getMessage());
+            Log::error('failed to delete option: ' . $e->getMessage());
     
-            return response()->json([
-                'message' => 'Gagal menghapus opsi.',
-                'error' => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to delete option.', false, 500);
         }
     }
 }

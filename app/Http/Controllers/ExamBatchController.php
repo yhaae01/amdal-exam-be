@@ -12,16 +12,12 @@ class ExamBatchController extends Controller
     public function index()
     {
         if (auth()->user()->role !== 'admin') {
-            return response()->json([
-                'message' => 'Forbidden.'
-            ], 403);
+            return apiResponse(null, 'Forbidden', false, 403);
         }
 
         $examBatches = ExamBatch::with('exam')->paginate(10);
 
-        return response()->json([
-            'data' => $examBatches
-        ], 200);
+        return apiResponse($examBatches, 'success in obtaining batches', true, 200);
     }
 
     public function store(Request $request)
@@ -37,13 +33,10 @@ class ExamBatchController extends Controller
 
             $batch = ExamBatch::create($validated);
 
-            return response()->json([
-                'message' => 'Batch berhasil dibuat',
-                'data' => $batch
-            ], 201);
+            return apiResponse($batch, 'batch created successfully', true, 201);
         } catch (\Exception $e) {
-            Log::error('Error saat membuat batch: ' . $e->getMessage());
-            return response()->json(['message' => 'Gagal membuat batch', 'error' => $e->getMessage()], 500);
+            Log::error('Error while creating batch: ' . $e->getMessage());
+            return apiResponse(null, 'failed to create batch', false, 500);
         }
     }
 
@@ -63,12 +56,10 @@ class ExamBatchController extends Controller
 
             $batch->users()->syncWithoutDetaching($users);
 
-            return response()->json([
-                'message' => 'Users berhasil di-assign ke batch'
-            ], 200);
+            return apiResponse(null, 'Users successfully assigned to batch', true, 200);
         } catch (\Exception $e) {
-            Log::error('Error saat assign user ke batch: ' . $e->getMessage());
-            return response()->json(['message' => 'Gagal assign user', 'error' => $e->getMessage()], 500);
+            Log::error('Error while assigning user to batch: ' . $e->getMessage());
+            return apiResponse(null, 'failed to assign user', false, 500);
         }
     }
 
@@ -76,10 +67,10 @@ class ExamBatchController extends Controller
     {
         try {
             $batch = ExamBatch::with(['exam', 'users'])->findOrFail($id);
-            return response()->json($batch);
+            return apiResponse($batch, 'success in obtaining batch', true, 200);
         } catch (\Exception $e) {
-            Log::error('Error saat mengambil batch: ' . $e->getMessage());
-            return response()->json(['message' => 'Batch tidak ditemukan', 'error' => $e->getMessage()], 404);
+            Log::error('Error while fetching batch: ' . $e->getMessage());
+            return apiResponse(null, 'batch not found', false, 404);
         }
     }
 
@@ -89,12 +80,11 @@ class ExamBatchController extends Controller
             $batch = ExamBatch::findOrFail($id);
             $batch->delete();
 
-            return response()->json([
-                'message' => 'Batch berhasil dihapus'
-            ], 200);
+            return apiResponse(null, 'batch deleted successfully', true, 200);
         } catch (\Exception $e) {
-            Log::error('Error saat menghapus batch: ' . $e->getMessage());
-            return response()->json(['message' => 'Gagal menghapus batch', 'error' => $e->getMessage()], 500);
+            Log::error('Error while deleting batch: ' . $e->getMessage());
+            
+            return apiResponse(null, 'failed to delete batch', false, 500);
         }
     }
 }

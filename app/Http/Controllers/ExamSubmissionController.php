@@ -11,9 +11,9 @@ class ExamSubmissionController extends Controller
 {
     public function index()
     {
-        return response()->json([
-            'data' => ExamSubmission::where('user_id', auth()->id())->with('exam')->get()
-        ]);
+        $data = ExamSubmission::where('user_id', auth()->id())->with('exam')->get();
+
+        return apiResponse($data, 'success in obtaining submissions', true, 200);
     }
 
     public function start(Request $request)
@@ -21,9 +21,7 @@ class ExamSubmissionController extends Controller
         try {
             // ✅ Cek: hanya user role 'user' yang boleh ikut ujian
             if (auth()->user()->role !== 'user') {
-                return response()->json([
-                    'message' => 'Hanya peserta (user) yang boleh mengikuti ujian.'
-                ], 403);
+                return apiResponse(null, 'only participants (users) may take the exam.', false, 403);
             }
             
             $request->validate([
@@ -37,29 +35,21 @@ class ExamSubmissionController extends Controller
     
             // ✅ Pastikan batch cocok dengan exam
             if ($batch->exam_id !== $request->exam_id) {
-                return response()->json([
-                    'message' => 'Batch tidak sesuai dengan ujian.'
-                ], 400);
+                return apiResponse(null, 'the batch does not comply with the test.', false, 400);
             }
     
             // ✅ Cek user terdaftar di batch
             if (!$user->examBatches->contains($batch->id)) {
-                return response()->json([
-                    'message' => 'Kamu tidak terdaftar di batch ini.'
-                ], 403);
+                return apiResponse(null, 'user are not registered in this batch.', false, 403);
             }
     
             // ✅ Validasi waktu sesi
             $now = now();
             if ($now->lt($batch->start_time)) {
-                return response()->json([
-                    'message' => 'Belum waktunya ujian dimulai.'
-                ], 403);
+                return apiResponse(null, 'exam is not yet started.', false, 403);
             }
             if ($now->gt($batch->end_time)) {
-                return response()->json([
-                    'message' => 'Waktu ujian pada batch ini telah berakhir.'
-                ], 403);
+                return apiResponse(null, 'exam has already ended.', false, 403);
             }
     
             // ✅ Cek apakah user sudah pernah ikut
@@ -68,9 +58,7 @@ class ExamSubmissionController extends Controller
                 ->first();
     
             if ($existing) {
-                return response()->json([
-                    'message' => 'Ujian sudah pernah dikerjakan.'
-                ], 409);
+                return apiResponse(null, 'user have already taken the exam.', false, 409);
             }
     
             // ✅ Buat submission
@@ -81,14 +69,11 @@ class ExamSubmissionController extends Controller
                 'started_at'    => $now,
             ]);
     
-            return response()->json($submission, 201);
-    
+            return apiResponse($submission, 'success in starting the exam', true, 201);
         } catch (\Exception $e) {
-            Log::error('Gagal memulai ujian: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'Terjadi kesalahan saat memulai ujian.',
-                'error'   => $e->getMessage()
-            ], 500);
+            Log::error('failed to start the exam: ' . $e->getMessage());
+
+            return apiResponse(null, 'failed to start the exam.', false, 500);
         }
     }
 
@@ -96,11 +81,11 @@ class ExamSubmissionController extends Controller
     {
         try {
             if ($submission->user_id !== auth()->id()) {
-                return response()->json(['message' => 'Unauthorized'], 403);
+                return apiResponse(null, 'unauthorized', false, 403);
             }
     
             if ($submission->submitted_at) {
-                return response()->json(['message' => 'Sudah disubmit sebelumnya.'], 400);
+                return apiResponse(null, 'user has already submitted previously.', false, 400);
             }
     
             $submission->submitted_at = now();
@@ -109,17 +94,15 @@ class ExamSubmissionController extends Controller
             $submission->score = $score;
             $submission->save();
     
-            return response()->json([
-                'message' => 'Ujian disubmit.',
-                'score'   => $score
-            ]);
-    
+            $data = [
+                'score' => $score
+            ];
+
+            return apiResponse($data, 'success in submitting the exam', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal submit ujian: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'Terjadi kesalahan saat submit ujian.',
-                'error'   => $e->getMessage()
-            ], 500);
+            Log::error('failed to submit the exam: ' . $e->getMessage());
+            
+            return apiResponse(null, 'an error occurred while submitting the exam.', false, 500);
         }
     }
 
@@ -127,18 +110,14 @@ class ExamSubmissionController extends Controller
     {
         try {
             if ($submission->user_id !== auth()->id()) {
-                return response()->json(['message' => 'Unauthorized'], 403);
+                return apiResponse(null, 'unauthorized', false, 403);
             }
     
-            return response()->json([
-                'data' => $submission->load('exam')
-            ]);
+            return apiResponse($submission->load('exam'), 'success in obtaining submission', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal menampilkan submission: ' . $e->getMessage());
-            return response()->json([
-                'message' => 'Gagal mengambil data submission.',
-                'error'   => $e->getMessage()
-            ], 500);
+            Log::error('failed to display submission: ' . $e->getMessage());
+
+            return apiResponse(null, 'failed to display submission.', false, 500);
         }
     }
 

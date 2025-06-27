@@ -39,18 +39,11 @@ class AnswerController extends Controller
             }
 
             $answer = Answer::create($validated);
-            return response()->json([
-                'message' => 'Jawaban berhasil disimpan.',
-                'data' => $answer
-            ], 201);
-
+            return apiResponse($answer, 'answer saved successfully', true, 201);
         } catch (\Exception $e) {
-            Log::error('Gagal simpan jawaban: ' . $e->getMessage());
+            Log::error('Failed to save answer: ' . $e->getMessage());
 
-            return response()->json([
-                'message' => 'Gagal menyimpan jawaban.',
-                'error' => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to save answer', false, 500);
         }
     }
 
@@ -66,18 +59,11 @@ class AnswerController extends Controller
     
             $answer->update($validated);
     
-            return response()->json([
-                'message' => 'Jawaban berhasil diperbarui.',
-                'data' => $answer
-            ]);
-    
+            return apiResponse($answer, 'answer updated successfully', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal update jawaban: ' . $e->getMessage());
+            Log::error('Failed to update answer: ' . $e->getMessage());
     
-            return response()->json([
-                'message' => 'Gagal update jawaban.',
-                'error' => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to update answer', false, 500);
         }
     }
 
@@ -85,9 +71,9 @@ class AnswerController extends Controller
     {
         $this->authorizeAnswerOwner($answer);
 
-        return response()->json([
-            'data' => $answer->load(['question', 'selectedOption'])
-        ]);
+        $data = $answer->load(['question', 'selectedOption']);
+
+        return apiResponse($data, 'answer successfully found', true, 200);
     }
 
     private function authorizeAnswerOwner(Answer $answer)
