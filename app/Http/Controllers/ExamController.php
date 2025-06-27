@@ -13,9 +13,7 @@ class ExamController extends Controller
     {
         $exams = Exam::withCount('questions')->paginate(10);
 
-        return response()->json([
-            'data' => $exams
-        ], 200);
+        return apiResponse($exams, 'success in obtaining exams', true, 200);
     }
 
     public function getAllExams()
@@ -37,16 +35,11 @@ class ExamController extends Controller
             //     }
             // ])->get();
 
-            return response()->json([
-                'data' => $exams
-            ], 200);
+            return apiResponse($exams, 'success in obtaining exams', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal mengambil semua data ujian: ' . $e->getMessage());
+            Log::error('Failed to retrieve complete exam data: ' . $e->getMessage());
 
-            return response()->json([
-                'message' => 'Gagal mengambil data ujian lengkap.',
-                'error'   => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to retrieve complete exam data.', false, 500);
         }
     }
 
@@ -67,18 +60,11 @@ class ExamController extends Controller
     
             $exam = Exam::create($validated);
     
-            return response()->json([
-                'message' => 'Data berhasil ditambahkan.',
-                'data' => $exam
-            ], 201);
-    
+            return apiResponse($exam, 'data added successfully.', true, 201);
         } catch (\Exception $e) {
-            Log::error('Ada error di : ' . $e->getMessage());
+            Log::error('failed to save test: ' . $e->getMessage());
     
-            return response()->json([
-                'message' => 'Gagal menyimpan ujian.',
-                'error' => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to save test.', false, 500);
         }
     }
 
@@ -94,17 +80,11 @@ class ExamController extends Controller
                 }
             ])->findOrFail($id);
     
-            return response()->json([
-                'data' => $exam
-            ]);
-    
+            return apiResponse($exam, 'success in obtaining exam', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal mengambil ujian: ' . $e->getMessage());
+            Log::error('failed to retrieve exam data: ' . $e->getMessage());
     
-            return response()->json([
-                'message' => 'Gagal mengambil data ujian.',
-                'error'   => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to retrieve exam data.', false, 500);
         }
     }
 
@@ -129,18 +109,11 @@ class ExamController extends Controller
     
             $exam->update($validated);
     
-            return response()->json([
-                'message' => 'Data berhasil diperbarui.',
-                'data' => $exam
-            ]);
-    
+            return apiResponse($exam, 'data updated successfully.', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal update ujian: ' . $e->getMessage());
+            Log::error('failed to update exam: ' . $e->getMessage());
     
-            return response()->json([
-                'message' => 'Gagal update ujian.',
-                'error' => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to update exam.', false, 500);
         }
     }
 
@@ -148,9 +121,7 @@ class ExamController extends Controller
     {
         try {
             if ($exam->submissions()->exists()) {
-                return response()->json([
-                    'message' => 'Tidak dapat menghapus ujian yang sudah dikerjakan.'
-                ], 400);
+                return apiResponse(null, 'cant delete completed exams.', false, 400);
             }
 
             if ($exam->image && Storage::disk('public')->exists($exam->image)) {
@@ -159,17 +130,11 @@ class ExamController extends Controller
 
             $exam->delete();
 
-            return response()->json([
-                'message' => 'Ujian berhasil dihapus.'
-            ], 200);
-
+            return apiResponse(null, 'exam deleted successfully.', true, 200);
         } catch (\Exception $e) {
-            Log::error('Gagal menghapus ujian: ' . $e->getMessage());
+            Log::error('failed to delete exam: ' . $e->getMessage());
 
-            return response()->json([
-                'message' => 'Gagal menghapus ujian.',
-                'error'   => $e->getMessage()
-            ], 500);
+            return apiResponse(null, 'failed to delete exam.', false, 500);
         }
     }
 }

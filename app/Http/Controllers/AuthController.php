@@ -15,28 +15,30 @@ class AuthController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return apiResponse(null, 'login failed, email or password does not match', false, 401);
         }
 
-        return response()->json([
+        $data = [
             'access_token' => $token,
             'token_type'   => 'bearer',
             'user'         => auth()->user()
-        ], 200);
+        ];
+
+        return apiResponse($data, 'login successful', true, 200);
     }
 
     public function logout()
     {
         try {
             JWTAuth::invalidate(JWTAuth::getToken());
-            return response()->json(['message' => 'User logged out successfully']);
+            return apiResponse(null, 'user logged out successfully', true, 200);
         } catch (JWTException $e) {
-            return response()->json(['error' => 'Failed to logout, token invalid'], 500);
+            return apiResponse(null, 'failed to logout, token invalid', false, 500);
         }
     }
 
     public function me()
     {
-        return response()->json(auth()->user());
+        return apiResponse(auth()->user(), 'success in obtaining personal information', true, 200);
     }
 }
