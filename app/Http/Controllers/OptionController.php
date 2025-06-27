@@ -79,4 +79,24 @@ class OptionController extends Controller
             return apiResponse(null, 'failed to delete option.', false, 500);
         }
     }
+
+    public function listOptions($question_id){
+        try {
+            $columns = ['id', 'question_id', 'option_text'];
+
+            if (auth()->user()->role === 'admin') {
+                $columns[] = 'is_correct';
+            }
+
+            $options = Option::select($columns)
+                ->where('question_id', $question_id)
+                ->get();
+                
+            return apiResponse($options, 'success in obtaining options', true, 200);
+        } catch (\Exception $e) {
+            Log::error('failed to retrieve option data: ' . $e->getMessage());
+    
+            return apiResponse(null, 'failed to retrieve option data.', false, 500);
+        }
+    }
 }

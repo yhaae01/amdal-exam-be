@@ -103,4 +103,21 @@ class QuestionController extends Controller
             return apiResponse(null, 'failed to delete question.', false, 500);
         }
     }
+
+    public function listQuestions($exam_id) {
+        try {
+            $questions = Question::where('exam_id', $exam_id);
+
+            if (auth()->user()->role === 'admin') {
+                $questions = $questions->paginate(10);
+            } else {
+                $questions = $questions->with(['options:id,question_id,option_text'])->get();
+            }
+            return apiResponse($questions, 'success in obtaining questions', true, 200);
+        } catch (\Exception $e) {
+            Log::error('failed to retrieve question data: ' . $e->getMessage());
+    
+            return apiResponse(null, 'failed to retrieve question data.', false, 500);
+        }
+    }
 }

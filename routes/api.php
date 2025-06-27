@@ -23,9 +23,11 @@ Route::middleware(['auth:api'])->group(function () {
 
     // ❓ CRUD Question (soal)
     Route::apiResource('questions', QuestionController::class);
+    Route::get('/questions/list/{exam_id}', [QuestionController::class, 'listQuestions']);
 
     // 🔘 CRUD Option (pilihan jawaban)
     Route::apiResource('options', OptionController::class);
+    Route::get('/options/list/{question_id}', [OptionController::class, 'listOptions']);
 
     // 📝 Pelaksanaan ujian
     Route::post('/exam-submissions/start', [ExamSubmissionController::class, 'start']); // Mulai ujian

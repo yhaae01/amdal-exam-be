@@ -15,40 +15,177 @@ class ExamSeeder extends Seeder
      */
     public function run(): void
     {
-        Exam::create([
+        $exam1 = Exam::create([
             'title'       => 'Ujian Tenaga Teknis Uji Administrasi',
             'description' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi.',
             'duration'    => 60
         ]);
         
-        Exam::create([
+        $exam2 = Exam::create([
             'title'       => 'Ujian Tenaga Teknis Helpdesk Amdalnet',
             'description' => 'Ujian Online untuk calon Tenaga Teknis Helpdesk Amdalnet.',
             'duration'    => 60
         ]);
 
-        Exam::create([
+        $exam3 = Exam::create([
             'title'       => 'Ujian Tenaga Teknis Pendukung Persetujuan',
             'description' => 'Ujian Online untuk calon Tenaga Teknis Pendukung Persetujuan.',
             'duration'    => 60
         ]);
         
-        Exam::create([
+        $exam4 = Exam::create([
             'title'       => 'Ujian Tenaga Teknis Database Persetujuan Lingkungan',
             'description' => 'Ujian Online untuk calon Tenaga Teknis Database Persetujuan Lingkungan.',
             'duration'    => 60
         ]);
 
-        Exam::create([
+        $exam5 = Exam::create([
             'title'       => 'Ujian Tenaga Teknis IT Hardware/Networking',
             'description' => 'Ujian Online untuk calon Tenaga Teknis IT Hardware/Networking.',
             'duration'    => 60
         ]);
 
-        Exam::create([
+        $exam6 = Exam::create([
             'title'       => 'Ujian Tenaga Teknis Programer Amdalnet',
             'description' => 'Ujian Online untuk calon Tenaga Teknis Programer Amdalnet.',
             'duration'    => 60
+        ]);
+
+        // Create Question and Option
+        $question1 = Question::create([
+            'exam_id'       => $exam1->id,
+            'question_text' => 'Apa itu Ujian Tenaga Teknis Uji Administrasi?',
+            'question_type' => 'choice',
+            'order'         => 1,
+            'weight'        => 20
+        ]);
+
+        $question2 = Question::create([
+            'exam_id'       => $exam1->id,
+            'question_text' => 'Apa itu Tenaga Teknis Uji Administrasi?',
+            'question_type' => 'choice',
+            'order'         => 2,
+            'weight'        => 20
+        ]);
+
+        $question3 = Question::create([
+            'exam_id'       => $exam1->id,
+            'question_text' => 'Siapa itu Dandun?',
+            'question_type' => 'multiple_choice',
+            'order'         => 3,
+            'weight'        => 20
+        ]);
+
+        $question4 = Question::create([
+            'exam_id'       => $exam1->id,
+            'question_text' => 'Apakah dandun baik ?',
+            'question_type' => 'choice',
+            'order'         => 4,
+            'weight'        => 20
+        ]);
+
+        $question5 = Question::create([
+            'exam_id'       => $exam1->id,
+            'question_text' => 'Dandun Ganteng ga ?',
+            'question_type' => 'choice',
+            'order'         => 5,
+            'weight'        => 20
+        ]);
+
+        $option1 = Option::create([
+            'question_id' => $question1->id,
+            'option_text' => 'Ujian Tenaga Teknis Uji Administrasi',
+            'is_correct'  => true
+        ]);
+
+        $option2 = Option::create([
+            'question_id' => $question1->id,
+            'option_text' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi.',
+            'is_correct'  => false
+        ]);
+
+        $option3 = Option::create([
+            'question_id' => $question1->id,
+            'option_text' => 'Tenaga Teknis Uji Administrasi',
+            'is_correct'  => false
+        ]);
+
+        $option4 = Option::create([
+            'question_id' => $question1->id,
+            'option_text' => 'Tenaga Teknis Uji Administrasi uhuyyyyy.',
+            'is_correct'  => false
+        ]);
+
+        $option5 = Option::create([
+            'question_id' => $question2->id,
+            'option_text' => 'Tenaga Teknis Uji Administrasi.',
+            'is_correct'  => true
+        ]);
+
+        $option6 = Option::create([
+            'question_id' => $question2->id,
+            'option_text' => 'Ujian Tenaga Teknis Uji Administrasi.',
+            'is_correct'  => false
+        ]);
+
+        $option7 = Option::create([
+            'question_id' => $question2->id,
+            'option_text' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi.',
+            'is_correct'  => false
+        ]);
+
+        $option8 = Option::create([
+            'question_id' => $question2->id,
+            'option_text' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi Prikitiw',
+            'is_correct'  => false
+        ]);
+
+        $option9 = Option::create([
+            'question_id' => $question3->id,
+            'option_text' => 'Dandun',
+            'is_correct'  => true
+        ]);
+
+        $option10 = Option::create([
+            'question_id' => $question3->id,
+            'option_text' => 'Dandun Prikitiw',
+            'is_correct'  => false
+        ]);
+
+        $option11 = Option::create([
+            'question_id' => $question3->id,
+            'option_text' => 'Dandun Ganteng',
+            'is_correct'  => false
+        ]);
+
+        $option12 = Option::create([
+            'question_id' => $question3->id,
+            'option_text' => 'Dandun Baik',
+            'is_correct'  => false
+        ]);
+
+        $option13 = Option::create([
+            'question_id' => $question4->id,
+            'option_text' => 'Ya',
+            'is_correct'  => true
+        ]);
+
+        $option14 = Option::create([
+            'question_id' => $question4->id,
+            'option_text' => 'Tidak',
+            'is_correct'  => false
+        ]);
+
+        $option15 = Option::create([
+            'question_id' => $question5->id,
+            'option_text' => 'Ya',
+            'is_correct'  => true
+        ]);
+
+        $option16 = Option::create([
+            'question_id' => $question5->id,
+            'option_text' => 'Tidak',
+            'is_correct'  => false
         ]);
 
         // $examTitles = [
