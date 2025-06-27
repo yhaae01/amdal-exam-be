@@ -20,7 +20,7 @@ class ExamAnswerSeeder extends Seeder
      */
     public function run(): void
     {
-        $emails = ['user1@example.com', 'user11@example.com'];
+        $emails = ['user1@example.com', 'user2@example.com', 'user3@example.com'];
         $exam = Exam::first();
         $batch = ExamBatch::where('name', 'Sesi 1')->first();
 
@@ -64,8 +64,6 @@ class ExamAnswerSeeder extends Seeder
                     'answer_text'        => null
                 ]);
             }
-
-            dump("✅ Jawaban untuk $email berhasil dibuat.");
         }
     }
 
