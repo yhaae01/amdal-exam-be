@@ -13,8 +13,6 @@ return new class extends Migration
     {
         Schema::create('exam_batches', function (Blueprint $table) {
             $table->uuid('id')->primary();
-            $table->uuid('exam_id');
-            $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
             $table->string('name')->comment('contoh: Sesi 1');
             $table->dateTime('start_time');
             $table->dateTime('end_time');

@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Exam;
 use App\Models\ExamBatch;
 use App\Models\ExamBatchUser;
+use App\Models\ExamSubmission;
 use App\Models\Option;
 use App\Models\Question;
 use App\Models\User;
@@ -68,7 +69,7 @@ class ExamSeeder extends Seeder
             'exam_id'       => $exam1->id,
             'question_text' => 'Apa itu Tenaga Teknis Uji Administrasi?',
             'question_type' => 'choice',
-            'order'         => 2,
+            'order'         => 5,
             'weight'        => 20
         ]);
 
@@ -76,7 +77,7 @@ class ExamSeeder extends Seeder
             'exam_id'       => $exam1->id,
             'question_text' => 'Siapa itu Dandun?',
             'question_type' => 'multiple_choice',
-            'order'         => 3,
+            'order'         => 6,
             'weight'        => 20
         ]);
 
@@ -92,8 +93,24 @@ class ExamSeeder extends Seeder
             'exam_id'       => $exam1->id,
             'question_text' => 'Dandun Ganteng ga ?',
             'question_type' => 'choice',
-            'order'         => 5,
+            'order'         => 2,
             'weight'        => 20
+        ]);
+
+        $question6 = Question::create([
+            'exam_id'       => $exam1->id,
+            'question_text' => 'Deskripsikan tentang dandun ?',
+            'question_type' => 'essay',
+            'order'         => 7,
+            'weight'        => 40
+        ]);
+
+        $question7 = Question::create([
+            'exam_id'       => $exam1->id,
+            'question_text' => 'Apakah dandun cocok dengan mie ayam ?',
+            'question_type' => 'essay',
+            'order'         => 3,
+            'weight'        => 40
         ]);
 
         $option1 = Option::create([
@@ -194,7 +211,6 @@ class ExamSeeder extends Seeder
 
         // Add user in batch
         $exam_batch1 = ExamBatch::create([
-            'exam_id' => $exam1->id,
             'name'    => 'Batch 1',
             'start_time' => now(),
             'end_time' => now()->addMinutes(60),
@@ -202,10 +218,10 @@ class ExamSeeder extends Seeder
         ]);
 
         $exam_batch2 = ExamBatch::create([
-            'exam_id' => $exam1->id,
             'name'    => 'Batch 2',
             'start_time' => now()->addMinutes(60),
             'end_time' => now()->addMinutes(120),
+            'max_participants' => 50
         ]);
         
         $user1 = User::create([
@@ -225,14 +241,24 @@ class ExamSeeder extends Seeder
         ]);
 
         $user_exam1 = ExamBatchUser::create([
+            'exam_id' => null,
             'exam_batch_id' => $exam_batch1->id,
             'user_id' => $user1->id
         ]);
 
         $user_exam2 = ExamBatchUser::create([
+            'exam_id' => $exam1->id,
             'exam_batch_id' => $exam_batch2->id,
             'user_id' => $user2->id
         ]);
+
+        $submission = ExamSubmission::create([
+            'user_id'       => $user2->id,
+            'exam_id'       => $exam1->id,
+            'exam_batch_id' => $exam_batch2->id,
+            'started_at'    => now(), 
+        ]);
+
         // $examTitles = [
         //     'Ujian Tenaga Teknis Uji Administrasi' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi.',
         //     'Ujian Tenaga Teknis Helpdesk Amdalnet' => 'Ujian Online untuk calon Tenaga Teknis Helpdesk Amdalnet.',

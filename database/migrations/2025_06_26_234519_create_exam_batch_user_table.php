@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('exam_batch_users', function (Blueprint $table) {
             $table->uuid('id')->primary();
+            $table->uuid('exam_id')->nullable();
+            $table->foreign('exam_id')->references('id')->on('exams')->onDelete('cascade');
             $table->uuid('exam_batch_id');
             $table->uuid('user_id');
             $table->timestamps();

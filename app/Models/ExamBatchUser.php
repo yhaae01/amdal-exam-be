@@ -16,6 +16,7 @@ class ExamBatchUser extends Model
     protected $fillable = [
         'exam_batch_id',
         'user_id',
+        'exam_id'
     ];
 
     public function user()
@@ -26,5 +27,10 @@ class ExamBatchUser extends Model
     public function examBatch()
     {
         return $this->belongsTo(ExamBatch::class);
+    }
+    
+    public function exam()
+    {
+        return $this->belongsTo(Exam::class);
     }
 }

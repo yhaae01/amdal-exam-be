@@ -13,7 +13,8 @@ class ExamSubmission extends Model
         'user_id',
         'started_at',
         'submitted_at',
-        'score'
+        'score',
+        'exam_batch_id'
     ];
 
     public function user()

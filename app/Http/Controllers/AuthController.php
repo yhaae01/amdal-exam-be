@@ -22,10 +22,15 @@ class AuthController extends Controller
         $user = auth()->user();
         
         $batchUser = ExamBatchUser::with('examBatch')->where('user_id', $user->id)->first();
-                
+        
+        $submission = $user->submissions()->select('started_at', 'submitted_at')->where('exam_id', $batchUser->exam_id)->where('exam_batch_id', $batchUser->examBatch->id)->where('user_id', $user->id)->first();
+
+        $user->start_exam = $submission->started_at ?? null;
+        $user->submited_at = $submission->submitted_at ?? null;
+        $user->exam_id = $batchUser->exam_id ?? null;
         $user->batch = $batchUser->examBatch->name       ?? null;
-        $user->start_time = $batchUser->examBatch->start_time ?? null;
-        $user->end_time = $batchUser->examBatch->end_time   ?? null;
+        $user->batch_start_time = $batchUser->examBatch->start_time ?? null;
+        $user->batch_end_time = $batchUser->examBatch->end_time   ?? null;
 
         $data = [
             'access_token' => $token,
@@ -52,9 +57,14 @@ class AuthController extends Controller
                
         $user = auth()->user();
 
+        $submission = $user->submissions()->select('started_at', 'submitted_at')->where('exam_id', $batchUser->exam_id)->where('exam_batch_id', $batchUser->examBatch->id)->where('user_id', $user->id)->first();
+
+        $user->start_exam = $submission->started_at ?? null;
+        $user->submited_at = $submission->submitted_at ?? null;
+        $user->exam_id = $batchUser->exam_id ?? null;
         $user->batch = $batchUser->examBatch->name       ?? null;
-        $user->start_time = $batchUser->examBatch->start_time ?? null;
-        $user->end_time = $batchUser->examBatch->end_time   ?? null;
+        $user->batch_start_time = $batchUser->examBatch->start_time ?? null;
+        $user->batch_end_time = $batchUser->examBatch->end_time   ?? null;
 
         return apiResponse($user, 'success in obtaining personal information', true, 200);
     }

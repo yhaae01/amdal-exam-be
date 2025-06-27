@@ -14,17 +14,11 @@ class ExamBatch extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'exam_id',
         'name',
         'start_time',
         'end_time',
         'max_participants'
     ];
-
-    public function exam()
-    {
-        return $this->belongsTo(Exam::class);
-    }
 
     public function users()
     {
