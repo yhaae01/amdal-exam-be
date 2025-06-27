@@ -11,15 +11,14 @@ class QuestionController extends Controller
 {
     public function index(Request $request)
     {
-        $request->validate([
-            'exam_id' => 'required|exists:exams,id'
-        ]);
-    
-        $questions = Question::where('exam_id', $request->exam_id)
-            ->with('options')
-            ->orderBy('order')
-            ->get();
-    
+        if (auth()->user()->role !== 'admin') {
+            return response()->json([
+                'message' => 'Forbidden.'
+            ], 403);
+        }
+
+        $questions = Question::with('options')->orderBy('order')->paginate(10);
+
         return response()->json([
             'data' => $questions
         ], 200);
