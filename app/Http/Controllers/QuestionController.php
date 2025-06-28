@@ -58,7 +58,7 @@ class QuestionController extends Controller
     public function show(Question $question)
     {
         try {
-            $question->load(['options', 'answers']);
+            $question->load(['options', 'answers', 'exam']);
             return apiResponse($question, 'success in obtaining question', true, 200);
         } catch (\Exception $e) {
             Log::error('failed to retrieve question data: ' . $e->getMessage());
