@@ -115,7 +115,7 @@ class QuestionController extends Controller
 
     public function listQuestions($exam_id) {
         try {
-            $questions = Question::where('exam_id', $exam_id);
+            $questions = Question::where('exam_id', $exam_id)->orderBy('order');
 
             if (auth()->user()->role === 'admin') {
                 $questions = $questions->paginate(10);
