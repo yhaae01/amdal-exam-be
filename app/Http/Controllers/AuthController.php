@@ -20,17 +20,32 @@ class AuthController extends Controller
         }
 
         $user = auth()->user();
-        
-        $batchUser = ExamBatchUser::with('examBatch')->where('user_id', $user->id)->first();
-        
-        $submission = $user->submissions()->select('started_at', 'submitted_at')->where('exam_id', $batchUser->exam_id)->where('exam_batch_id', $batchUser->examBatch->id)->where('user_id', $user->id)->first();
 
-        $user->start_exam = $submission->started_at ?? null;
-        $user->submited_at = $submission->submitted_at ?? null;
-        $user->exam_id = $batchUser->exam_id ?? null;
-        $user->batch = $batchUser->examBatch->name       ?? null;
-        $user->batch_start_time = $batchUser->examBatch->start_time ?? null;
-        $user->batch_end_time = $batchUser->examBatch->end_time   ?? null;
+        $batchUser = ExamBatchUser::with('examBatch')->where('user_id', $user->id)->first();
+
+        // Default values
+        $user->exam_id = null;
+        $user->start_exam = null;
+        $user->submited_at = null;
+        $user->batch = null;
+        $user->batch_start_time = null;
+        $user->batch_end_time = null;
+
+        if ($batchUser && $batchUser->exam_id && $batchUser->examBatch) {
+            $submission = $user->submissions()
+                ->select('started_at', 'submitted_at')
+                ->where('exam_id', $batchUser->exam_id)
+                ->where('exam_batch_id', $batchUser->examBatch->id)
+                ->where('user_id', $user->id)
+                ->first();
+
+            $user->exam_id = $batchUser->exam_id;
+            $user->start_exam = $submission->started_at ?? null;
+            $user->submited_at = $submission->submitted_at ?? null;
+            $user->batch = $batchUser->examBatch->name;
+            $user->batch_start_time = $batchUser->examBatch->start_time;
+            $user->batch_end_time = $batchUser->examBatch->end_time;
+        }
 
         $data = [
             'access_token' => $token,
