@@ -25,6 +25,7 @@ Route::middleware(['auth:api'])->group(function () {
     // ❓ CRUD Question (soal)
     Route::apiResource('questions', QuestionController::class);
     Route::get('/questions/list/{exam_id}', [QuestionController::class, 'listQuestions']);
+    Route::post('/questions/store-batch', [QuestionController::class, 'storeBatch']);
 
     // 🔘 CRUD Option (pilihan jawaban)
     Route::apiResource('options', OptionController::class);
