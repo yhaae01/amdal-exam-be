@@ -99,9 +99,11 @@ class ExamSubmissionController extends Controller
         }
     }
 
-    public function submit(Request $request, ExamSubmission $submission)
+    public function submit()
     {
         try {
+            $submission = ExamSubmission::where('user_id', auth()->id())->first();
+
             if ($submission->user_id !== auth()->id()) {
                 return apiResponse(null, 'unauthorized', false, 403);
             }
