@@ -31,7 +31,7 @@ class AuthController extends Controller
         $user->batch_start_time = null;
         $user->batch_end_time = null;
 
-        if ($batchUser && $batchUser->exam_id && $batchUser->examBatch) {
+        if ($batchUser && $batchUser->examBatch) {
             $submission = $user->submissions()
                 ->select('started_at', 'submitted_at')
                 ->where('exam_id', $batchUser->exam_id)
@@ -82,7 +82,7 @@ class AuthController extends Controller
         $user->batch_start_time = null;
         $user->batch_end_time = null;
 
-        if ($batchUser && $batchUser->exam_id && $batchUser->examBatch) {
+        if ($batchUser && $batchUser->examBatch) {
             $submission = $user->submissions()
                 ->select('started_at', 'submitted_at')
                 ->where('exam_id', $batchUser->exam_id)
