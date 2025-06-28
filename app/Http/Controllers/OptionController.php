@@ -9,9 +9,18 @@ use Illuminate\Support\Facades\Log;
 
 class OptionController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $options = Option::with('question')->get();
+        $search = $request->query('search'); // ambil query param `?search=...`
+
+        $options = Option::with('question')
+            ->when($search, function ($query, $search) {
+                $query->where('option_text', 'ILIKE', "%{$search}%")
+                    ->orWhereHas('question', function ($q) use ($search) {
+                        $q->where('question_text', 'ILIKE', "%{$search}%");
+                    });
+            })
+            ->get();
 
         $data = $options->map(function ($option) {
             return [
@@ -24,6 +33,7 @@ class OptionController extends Controller
 
         return apiResponse($data, 'Success get options with question text', true, 200);
     }
+
 
     public function store(Request $request)
     {
@@ -44,10 +54,11 @@ class OptionController extends Controller
         }
     }
 
-    public function show(Option $option)
+    public function show($id)
     {
         try {
-            return apiResponse($option, 'success in obtaining option', true, 200);
+            $options = Option::with('question')->where('id', $id)->get();
+            return apiResponse($options, 'success in obtaining option', true, 200);
         } catch (\Exception $e) {
             Log::error('failed to display options: ' . $e->getMessage());
     

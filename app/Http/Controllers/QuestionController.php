@@ -22,8 +22,8 @@ class QuestionController extends Controller
         $query = Question::with('options')->orderBy('order');
     
         if ($search) {
-            $query->where('question_text', 'like', '%' . $search . '%')
-                ->orWhere('question_type', 'like', '%' . $search . '%');
+            $query->where('question_text', 'ilike', '%' . $search . '%')
+                ->orWhere('question_type', 'ilike', '%' . $search . '%');
         }
     
         $questions = $query->paginate(10);
