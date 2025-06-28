@@ -3,20 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Option;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class OptionController extends Controller
 {
-    public function index(Request $request)
+    public function index()
     {
-        $request->validate([
-            'question_id' => 'required|exists:questions,id'
-        ]);
-    
-        $options = Option::where('question_id', $request->question_id)->get();
-    
-        return apiResponse($options, 'success in obtaining options', true, 200);
+        $options = Option::with('question')->get();
+
+        $data = $options->map(function ($option) {
+            return [
+                'id'            => $option->id,
+                'option_text'   => $option->option_text,
+                'is_correct'    => $option->is_correct,
+                'question_text' => $option->question->question_text ?? null,
+            ];
+        });
+
+        return apiResponse($data, 'Success get options with question text', true, 200);
     }
 
     public function store(Request $request)
