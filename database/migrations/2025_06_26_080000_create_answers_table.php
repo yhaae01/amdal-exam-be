@@ -20,7 +20,7 @@ return new class extends Migration
             $table->uuid('question_id');
             $table->foreign('question_id')->references('id')->on('questions')->onDelete('cascade');
             
-            $table->uuid('selected_option_id');
+            $table->uuid('selected_option_id')->nullable();
             $table->foreign('selected_option_id')->references('id')->on('options')->onDelete('cascade');
             $table->timestamps();
         });
