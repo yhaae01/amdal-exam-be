@@ -33,15 +33,15 @@ Route::middleware(['auth:api'])->group(function () {
 
     // 📝 Pelaksanaan ujian
     Route::post('/exam-submissions/start', [ExamSubmissionController::class, 'start']); // Mulai ujian
-    Route::post('/exam-submissions/{submission}/submit', [ExamSubmissionController::class, 'submit']); // Submit ujian
+    Route::post('/exam-submissions/submit', [ExamSubmissionController::class, 'submit']); // Submit ujian
     Route::get('/exam-submissions/{submission}', [ExamSubmissionController::class, 'show']); // Lihat detail ujian yang sudah dikerjakan
     Route::get('/my-submissions', [ExamSubmissionController::class, 'index']); // Daftar semua submission user
 
+    Route::get('/answers/list', [AnswerController::class, 'getAllAnswerUsers']);
     // ✏️ Jawaban user
     Route::apiResource('answers', AnswerController::class)->only([
         'index', 'store', 'update', 'show'
     ]);
-    Route::get('/answers/list', [AnswerController::class, 'getAllAnswerUsers']);
 
     // 🗓️ Manajemen Batch Ujian
     Route::get('/exam-batches', [ExamBatchController::class, 'index']);
