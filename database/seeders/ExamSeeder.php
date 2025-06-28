@@ -60,7 +60,7 @@ class ExamSeeder extends Seeder
         $question1 = Question::create([
             'exam_id'       => $exam1->id,
             'question_text' => 'Apa itu Ujian Tenaga Teknis Uji Administrasi?',
-            'question_type' => 'choice',
+            'question_type' => 'multiple_choice',
             'order'         => 1,
             'weight'        => 20
         ]);
@@ -68,7 +68,7 @@ class ExamSeeder extends Seeder
         $question2 = Question::create([
             'exam_id'       => $exam1->id,
             'question_text' => 'Apa itu Tenaga Teknis Uji Administrasi?',
-            'question_type' => 'choice',
+            'question_type' => 'multiple_choice',
             'order'         => 5,
             'weight'        => 20
         ]);
@@ -84,7 +84,7 @@ class ExamSeeder extends Seeder
         $question4 = Question::create([
             'exam_id'       => $exam1->id,
             'question_text' => 'Apakah dandun baik ?',
-            'question_type' => 'choice',
+            'question_type' => 'multiple_choice',
             'order'         => 4,
             'weight'        => 20
         ]);
@@ -92,7 +92,7 @@ class ExamSeeder extends Seeder
         $question5 = Question::create([
             'exam_id'       => $exam1->id,
             'question_text' => 'Dandun Ganteng ga ?',
-            'question_type' => 'choice',
+            'question_type' => 'multiple_choice',
             'order'         => 2,
             'weight'        => 20
         ]);
