@@ -40,7 +40,7 @@ Route::middleware(['auth:api'])->group(function () {
     Route::apiResource('answers', AnswerController::class)->only([
         'index', 'store', 'update', 'show'
     ]);
-    Route::get('/answers/list/{user_id}', [AnswerController::class, 'getAllAnswerUsers']);
+    Route::get('/answers/list', [AnswerController::class, 'getAllAnswerUsers']);
 
     // 🗓️ Manajemen Batch Ujian
     Route::get('/exam-batches', [ExamBatchController::class, 'index']);
