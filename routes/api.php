@@ -25,6 +25,7 @@ Route::middleware(['auth:api'])->group(function () {
     // ❓ CRUD Question (soal)
     Route::apiResource('questions', QuestionController::class);
     Route::get('/questions/list/{exam_id}', [QuestionController::class, 'listQuestions']);
+    Route::post('/questions/store-batch', [QuestionController::class, 'storeBatch']);
 
     // 🔘 CRUD Option (pilihan jawaban)
     Route::apiResource('options', OptionController::class);
@@ -49,10 +50,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::post('/exam-batches/{id}/assign-users', [ExamBatchController::class, 'assignUsers']);
 
     // 👤 Manajemen User
-    Route::middleware('auth:api')->group(function () {
-        Route::get('/users', [UserController::class, 'index']);
-        Route::post('/users', [UserController::class, 'store']);
-        Route::put('/users/{id}', [UserController::class, 'update']);
-        Route::delete('/users/{id}', [UserController::class, 'destroy']);
-    });
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/users', [UserController::class, 'store']);
+    Route::put('/users/{id}', [UserController::class, 'update']);
+    Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    Route::post('/users/import', [UserController::class, 'import']);
 });
