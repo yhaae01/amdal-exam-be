@@ -13,10 +13,13 @@ class OptionController extends Controller
         $request->validate([
             'question_id' => 'required|exists:questions,id'
         ]);
+
+        $question = Option::with('options')->findOrFail($request->question_id);
     
-        $options = Option::where('question_id', $request->question_id)->get();
-    
-        return apiResponse($options, 'success in obtaining options', true, 200);
+        return apiResponse([
+            'question_text' => $question->question_text,
+            'options'       => $question->options
+        ], 'success in obtaining options with question name', true, 200);
     }
 
     public function store(Request $request)
