@@ -24,7 +24,8 @@ class UserSeeder extends Seeder
             'is_active' => true,
         ]);
 
-        Excel::import(new UsersImport, database_path('seeders/data/template_peserta_ujian.xlsx'));
+        // import users from Excel file
+        // Excel::import(new UsersImport, database_path('seeders/data/template_peserta_ujian.xlsx'));
 
         // User::create([
         //     'name'      => 'User 3',

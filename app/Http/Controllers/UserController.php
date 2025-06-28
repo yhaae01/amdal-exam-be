@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Imports\UsersImport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
@@ -103,6 +106,25 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to delete user: ' . $e->getMessage());
             return apiResponse(null, 'failed to delete user', false, 500);
+        }
+    }
+
+    public function import(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'file' => 'required|mimes:xlsx,xls,csv'
+        ]);
+
+        if ($validator->fails()) {
+            return apiResponse(null, 'Invalid file upload', false, 422);
+        }
+
+        try {
+            Excel::import(new UsersImport, $request->file('file'));
+
+            return apiResponse(null, 'Users imported successfully', true, 200);
+        } catch (\Exception $e) {
+            return apiResponse(null, 'Import failed', false, 500);
         }
     }
 }
