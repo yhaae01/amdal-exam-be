@@ -14,9 +14,18 @@ class QuestionController extends Controller
         if (auth()->user()->role !== 'admin') {
             return apiResponse(null, 'forbidden', false, 403);
         }
-
-        $questions = Question::with('options')->orderBy('order')->paginate(10);
-
+    
+        $search = $request->query('search');
+    
+        $query = Question::with('options')->orderBy('order');
+    
+        if ($search) {
+            $query->where('question_text', 'like', '%' . $search . '%')
+                ->orWhere('question_type', 'like', '%' . $search . '%');
+        }
+    
+        $questions = $query->paginate(10);
+    
         return apiResponse($questions, 'success in obtaining questions', true, 200);
     }
 
@@ -101,6 +110,23 @@ class QuestionController extends Controller
             Log::error('failed to delete question: ' . $e->getMessage());
 
             return apiResponse(null, 'failed to delete question.', false, 500);
+        }
+    }
+
+    public function listQuestions($exam_id) {
+        try {
+            $questions = Question::where('exam_id', $exam_id);
+
+            if (auth()->user()->role === 'admin') {
+                $questions = $questions->paginate(10);
+            } else {
+                $questions = $questions->with(['options:id,question_id,option_text'])->get();
+            }
+            return apiResponse($questions, 'success in obtaining questions', true, 200);
+        } catch (\Exception $e) {
+            Log::error('failed to retrieve question data: ' . $e->getMessage());
+    
+            return apiResponse(null, 'failed to retrieve question data.', false, 500);
         }
     }
 }

@@ -4,18 +4,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExamController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\QuestionController;
-use App\Http\Controllers\ExamSubmissionController;
 use App\Http\Controllers\ExamBatchController;
+use App\Http\Controllers\ExamSubmissionController;
 
 Route::post('/login', [AuthController::class, 'login']);
-// Get all exams with questions and user answers
-Route::get('/exams/all', [ExamController::class, 'getAllExams']);
 
 Route::middleware(['auth:api'])->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']);
+    // Get all exams with questions and user answers
+    Route::get('/exams/all', [ExamController::class, 'getAllExams']);
+    Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
     // 📚 CRUD Exam (ujian)
@@ -23,9 +24,11 @@ Route::middleware(['auth:api'])->group(function () {
 
     // ❓ CRUD Question (soal)
     Route::apiResource('questions', QuestionController::class);
+    Route::get('/questions/list/{exam_id}', [QuestionController::class, 'listQuestions']);
 
     // 🔘 CRUD Option (pilihan jawaban)
     Route::apiResource('options', OptionController::class);
+    Route::get('/options/list/{question_id}', [OptionController::class, 'listOptions']);
 
     // 📝 Pelaksanaan ujian
     Route::post('/exam-submissions/start', [ExamSubmissionController::class, 'start']); // Mulai ujian
@@ -44,4 +47,12 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/exam-batches/{id}', [ExamBatchController::class, 'show']);
     Route::delete('/exam-batches/{id}', [ExamBatchController::class, 'destroy']);
     Route::post('/exam-batches/{id}/assign-users', [ExamBatchController::class, 'assignUsers']);
+
+    // 👤 Manajemen User
+    Route::middleware('auth:api')->group(function () {
+        Route::get('/users', [UserController::class, 'index']);
+        Route::post('/users', [UserController::class, 'store']);
+        Route::put('/users/{id}', [UserController::class, 'update']);
+        Route::delete('/users/{id}', [UserController::class, 'destroy']);
+    });
 });

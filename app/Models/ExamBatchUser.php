@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class ExamBatch extends Model
+class ExamBatchUser extends Model
 {
     use HasFactory, HasUuids;
 
@@ -14,19 +14,23 @@ class ExamBatch extends Model
     public $incrementing = false;
 
     protected $fillable = [
-        'name',
-        'start_time',
-        'end_time',
-        'max_participants'
+        'exam_batch_id',
+        'user_id',
+        'exam_id'
     ];
 
-    public function users()
+    public function user()
     {
-        return $this->belongsToMany(User::class, 'exam_batch_user');
+        return $this->belongsTo(User::class);
     }
 
-    public function examBatchUsers()
+    public function examBatch()
     {
-        return $this->hasMany(ExamBatchUser::class);
+        return $this->belongsTo(ExamBatch::class);
+    }
+    
+    public function exam()
+    {
+        return $this->belongsTo(Exam::class);
     }
 }

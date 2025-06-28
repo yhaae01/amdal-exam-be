@@ -35,4 +35,9 @@ class Exam extends Model
     {
         return $this->hasMany(ExamBatch::class);
     }
+
+    public function examBatchUsers()
+    {
+        return $this->hasMany(ExamBatchUser::class);
+    }
 }

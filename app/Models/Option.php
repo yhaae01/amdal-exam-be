@@ -13,7 +13,7 @@ class Option extends Model
         'option_text',
         'is_correct'
     ];
-    protected $hidden = ['is_correct'];
+    // protected $hidden = ['is_correct'];
 
     public function question()
     {

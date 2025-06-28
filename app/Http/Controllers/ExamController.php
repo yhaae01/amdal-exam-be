@@ -16,14 +16,26 @@ class ExamController extends Controller
         return apiResponse($exams, 'success in obtaining exams', true, 200);
     }
 
-    public function getAllExams()
+    public function getAllExams(Request $request)
     {
         try {
              // tidak difilter user
-            $exams = Exam::with([
-                'questions.options',
-                'questions.answers.examSubmission'
-            ])->paginate(10);
+            $isAdmin = auth()->user()->role === 'admin';
+
+            // $with = [
+            //     // 'questions.options',
+            //     // 'questions.answers.examSubmission'
+            // ];
+
+            $query = Exam::withCount('questions');
+            
+            $search = $request->query('search');
+            if ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            }
+
+            $exams = $isAdmin ? $query->paginate(10) : $query->get();
 
             // jika ingin mengambil data ujian yang sudah dikerjakan oleh user
             // $exams = Exam::with([
