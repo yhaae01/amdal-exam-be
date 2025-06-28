@@ -38,8 +38,9 @@ Route::middleware(['auth:api'])->group(function () {
 
     // ✏️ Jawaban user
     Route::apiResource('answers', AnswerController::class)->only([
-        'store', 'update', 'show'
+        'index', 'store', 'update', 'show'
     ]);
+    Route::get('/answers/list/{user_id}', [AnswerController::class, 'getAllAnswerUsers']);
 
     // 🗓️ Manajemen Batch Ujian
     Route::get('/exam-batches', [ExamBatchController::class, 'index']);

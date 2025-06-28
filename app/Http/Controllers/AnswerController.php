@@ -3,29 +3,40 @@
 namespace App\Http\Controllers;
 
 use App\Models\Answer;
+use App\Models\ExamSubmission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class AnswerController extends Controller
 {
+    public function index()
+    {
+        try {
+            $answers = Answer::with(['question', 'selectedOption'])->get();
+            return apiResponse($answers, 'success in obtaining answers', true, 200);
+        } catch (\Exception $e) {
+            Log::error('Failed to get answers: ' . $e->getMessage());
+            return apiResponse(null, 'failed to get answers', false, 500);
+        }
+    }
     public function store(Request $request)
     {
         try {
             $validated = $request->validate([
-                'exam_submission_id' => 'required|exists:exam_submissions,id',
                 'question_id'        => 'required|exists:questions,id',
                 'selected_option_id' => 'nullable|exists:options,id',
                 'answer_text'        => 'nullable|string'
             ]);
+            $examSubmissionId = ExamSubmission::select('id')->where('user_id', auth()->user()->id)->first();
 
-            // Cegah orang lain simpan ke submission bukan miliknya
-            $submission = \App\Models\ExamSubmission::find($validated['exam_submission_id']);
-            if ($submission->user_id !== Auth::id()) {
-                return response()->json(['message' => 'Forbidden'], 403);
-            }
+            // // Cegah orang lain simpan ke submission bukan miliknya
+            // $submission = \App\Models\ExamSubmission::find($examSubmissionId->id);
+            // if ($submission->user_id !== Auth::id()) {
+            //     return response()->json(['message' => 'Forbidden'], 403);
+            // }
 
-            $existing = Answer::where('exam_submission_id', $validated['exam_submission_id'])
+            $existing = Answer::where('exam_submission_id', $examSubmissionId->id)
                 ->where('question_id', $validated['question_id'])
                 ->first();
 
@@ -80,6 +91,17 @@ class AnswerController extends Controller
     {
         if ($answer->exam_submission->user_id !== auth()->id()) {
             abort(403, 'Forbidden');
+        }
+    }
+
+    public function getAllAnswerUsers()
+    {
+        try {
+            $answers = Answer::with(['question', 'selectedOption'])->where('user_id', auth()->user()->id)->get();
+            return apiResponse($answers, 'success in obtaining answers', true, 200);
+        } catch (\Exception $e) {
+            Log::error('Failed to get answers: ' . $e->getMessage());
+            return apiResponse(null, 'failed to get answers', false, 500);
         }
     }
 }
