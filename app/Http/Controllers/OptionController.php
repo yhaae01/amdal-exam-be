@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Option;
+use App\Models\Question;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -10,17 +11,29 @@ class OptionController extends Controller
 {
     public function index(Request $request)
     {
-        $request->validate([
-            'question_id' => 'required|exists:questions,id'
-        ]);
+        $search = $request->query('search'); // ambil query param `?search=...`
 
-        $question = Option::with('options')->findOrFail($request->question_id);
-    
-        return apiResponse([
-            'question_text' => $question->question_text,
-            'options'       => $question->options
-        ], 'success in obtaining options with question name', true, 200);
+        $options = Option::with('question')
+            ->when($search, function ($query, $search) {
+                $query->where('option_text', 'ILIKE', "%{$search}%")
+                    ->orWhereHas('question', function ($q) use ($search) {
+                        $q->where('question_text', 'ILIKE', "%{$search}%");
+                    });
+            })
+            ->get();
+
+        $data = $options->map(function ($option) {
+            return [
+                'id'            => $option->id,
+                'option_text'   => $option->option_text,
+                'is_correct'    => $option->is_correct,
+                'question_text' => $option->question->question_text ?? null,
+            ];
+        });
+
+        return apiResponse($data, 'Success get options with question text', true, 200);
     }
+
 
     public function store(Request $request)
     {
@@ -41,10 +54,11 @@ class OptionController extends Controller
         }
     }
 
-    public function show(Option $option)
+    public function show($id)
     {
         try {
-            return apiResponse($option, 'success in obtaining option', true, 200);
+            $options = Option::with('question')->where('id', $id)->get();
+            return apiResponse($options, 'success in obtaining option', true, 200);
         } catch (\Exception $e) {
             Log::error('failed to display options: ' . $e->getMessage());
     
