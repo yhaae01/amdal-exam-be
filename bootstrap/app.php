@@ -14,10 +14,12 @@ return Application::configure(basePath: dirname(__DIR__))
         apiPrefix: 'api/v1/',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        $middleware->redirectGuestsTo(fn () => null);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        //
+        $exceptions->render(function (Illuminate\Auth\AuthenticationException $e, $request) {
+            return apiResponse(null, $e->getMessage(), false, 401);
+        });
     })->create();
 
 Route::middleware('api')
