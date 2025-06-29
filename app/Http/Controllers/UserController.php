@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Imports\UsersImport;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
 use Maatwebsite\Excel\Facades\Excel;
@@ -106,6 +107,33 @@ class UserController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to delete user: ' . $e->getMessage());
             return apiResponse(null, 'failed to delete user', false, 500);
+        }
+    }
+
+    public function user_not_submitted_yet($id)
+    {
+        try {
+
+            $users = DB::table('exam_batch_users as ebu')
+            ->join('users', 'users.id', '=', 'ebu.user_id')
+            ->leftJoin('exam_submissions', 'exam_submissions.user_id', '=', 'ebu.user_id')
+            ->whereNull('exam_submissions.submitted_at')
+            ->where('ebu.exam_batch_id', $id)
+            ->select(
+                'users.id',
+                'users.name',
+                'users.email',
+                'ebu.exam_id',
+                'ebu.exam_batch_id',
+                'exam_submissions.submitted_at'
+            )
+            ->distinct()
+            ->get();
+
+            return apiResponse($users, 'user get successfully', true, 200);
+        } catch (\Exception $e) {
+            Log::error('Failed to get user: ' . $e->getMessage());
+            return apiResponse(null, 'failed to get user', false, 500);
         }
     }
 
