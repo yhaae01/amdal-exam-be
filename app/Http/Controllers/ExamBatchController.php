@@ -20,6 +20,17 @@ class ExamBatchController extends Controller
         return apiResponse($examBatches, 'success in obtaining batches', true, 200);
     }
 
+    public function all()
+    {
+        if (auth()->user()->role !== 'admin') {
+            return apiResponse(null, 'Forbidden', false, 403);
+        }
+
+        $examBatches = ExamBatch::all();
+
+        return apiResponse($examBatches, 'success in obtaining batches', true, 200);
+    }
+
     public function store(Request $request)
     {
         try {
@@ -27,7 +38,7 @@ class ExamBatchController extends Controller
                 // 'exam_id'          => 'required|exists:exams,id',
                 'name'             => 'required|string',
                 'start_time'       => 'required|date',
-                'end_time'         => 'required|date|after:start_time',
+                'end_time'         => 'required|date',
                 'max_participants' => 'nullable|integer'
             ]);
 
@@ -66,7 +77,7 @@ class ExamBatchController extends Controller
     public function show($id)
     {
         try {
-            $batch = ExamBatch::with(['exam', 'users'])->findOrFail($id);
+            $batch = ExamBatch::with(['exam','users'])->findOrFail($id);
             return apiResponse($batch, 'success in obtaining batch', true, 200);
         } catch (\Exception $e) {
             Log::error('Error while fetching batch: ' . $e->getMessage());

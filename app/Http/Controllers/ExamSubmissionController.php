@@ -6,6 +6,7 @@ use App\Models\ExamBatch;
 use App\Models\ExamBatchUser;
 use Illuminate\Http\Request;
 use App\Models\ExamSubmission;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -60,7 +61,7 @@ class ExamSubmissionController extends Controller
         // }
 
         // ✅ Validasi waktu sesi
-        $now = now();
+        $now = Carbon::now('Asia/Jakarta');
         if ($now->lt($examBatch->start_time)) {
             return apiResponse(null, 'exam is not yet started.', false, 403);
         }

@@ -55,6 +55,38 @@ class ExamController extends Controller
         }
     }
 
+    public function getAllExamsWithoutPaginate(Request $request)
+    {
+        try {
+            $query = Exam::withCount('questions');
+            
+            $search = $request->query('search');
+            if ($search) {
+                $query->where('title', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
+            }
+
+            // $exams = $isAdmin ? $query->paginate(10) : $query->get();
+            $exams = $query->get();
+
+            // jika ingin mengambil data ujian yang sudah dikerjakan oleh user
+            // $exams = Exam::with([
+            //     'questions.options',
+            //     'questions.answers' => function ($q) {
+            //         $q->whereHas('examSubmission', function ($q2) {
+            //             $q2->where('user_id', auth()->id());
+            //         });
+            //     }
+            // ])->get();
+
+            return apiResponse($exams, 'success in obtaining exams', true, 200);
+        } catch (\Exception $e) {
+            Log::error('Failed to retrieve complete exam data: ' . $e->getMessage());
+
+            return apiResponse(null, 'failed to retrieve complete exam data.', false, 500);
+        }
+    }
+
     public function store(Request $request)
     {
         try {

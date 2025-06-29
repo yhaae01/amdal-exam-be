@@ -9,6 +9,7 @@ use App\Models\ExamSubmission;
 use App\Models\Option;
 use App\Models\Question;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Support\Facades\Hash;
@@ -212,8 +213,8 @@ class ExamSeeder extends Seeder
         // Add user in batch
         $exam_batch1 = ExamBatch::create([
             'name'    => 'Batch 1',
-            'start_time' => now(),
-            'end_time' => now()->addMinutes(60),
+            'start_time' =>  Carbon::now('Asia/Jakarta'),
+            'end_time' => Carbon::now('Asia/Jakarta')->addMinutes(60),
             'max_participants' => 50
         ]);
 
