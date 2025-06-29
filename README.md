@@ -127,6 +127,10 @@ php artisan migrate:fresh --seed
 
 # Jalankan server
 php artisan serve
+
+#  Jika ingin Import User jalankan ini terlebih dahulu
+php artisan queue:work
+php artisan queue:restart (optional)
 ```
 
 ---

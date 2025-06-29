@@ -148,10 +148,10 @@ class UserController extends Controller
         }
 
         try {
-            Excel::import(new UsersImport, $request->file('file'));
-
-            return apiResponse(null, 'Users imported successfully', true, 200);
+            Excel::queueImport(new UsersImport, $request->file('file'));
+            return apiResponse(null, 'Import is being processed in background', true, 200);
         } catch (\Exception $e) {
+            Log::error('User import error: ' . $e->getMessage());
             return apiResponse(null, 'Import failed', false, 500);
         }
     }

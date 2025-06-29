@@ -9,9 +9,11 @@ use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ExamBatchController;
+use App\Http\Controllers\EmailBlastController;
 use App\Http\Controllers\ExamSubmissionController;
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::post('/blast-email', [EmailBlastController::class, 'blastEmail']);
 
 Route::middleware(['auth:api'])->group(function () {
     // Get all exams with questions and user answers
