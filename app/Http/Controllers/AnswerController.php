@@ -40,6 +40,12 @@ class AnswerController extends Controller
             $existing = Answer::where('exam_submission_id', $examSubmissionId->id)
                 ->where('question_id', $validated['question_id'])
                 ->first();
+            
+            if (($request->answer_text === '' || $request->answer_text === null) &&  $request->selected_option_id === null) {
+                $existing->delete();
+
+                return apiResponse($existing, 'answer deleted successfully', true, 200);
+            }
 
             if ($existing) {
                 $existing->update([
@@ -47,7 +53,7 @@ class AnswerController extends Controller
                     'answer_text'        => $validated['answer_text'] ?? null,
                 ]);
 
-                return response()->json($existing);
+                return apiResponse($existing, 'answer updated successfully', true, 200);
             }
 
             $answer = Answer::create($validated);

@@ -13,7 +13,11 @@ class ExamSubmissionController extends Controller
 {
     public function index()
     {
-        $data = ExamSubmission::where('user_id', auth()->id())->with('exam')->get();
+        $data = ExamSubmission::where('user_id', auth()->id())->with('exam')->first();
+
+        $examBatchUser = ExamBatchUser::where('user_id', auth()->id())->first();
+        
+        $data['isProgrammer'] = $examBatchUser && str_contains($examBatchUser->exam->title, 'Programmer');
 
         return apiResponse($data, 'success in obtaining submissions', true, 200);
     }
