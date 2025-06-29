@@ -24,7 +24,7 @@ class ExamBatchController extends Controller
     {
         try {
             $validated = $request->validate([
-                'exam_id'          => 'required|exists:exams,id',
+                // 'exam_id'          => 'required|exists:exams,id',
                 'name'             => 'required|string',
                 'start_time'       => 'required|date',
                 'end_time'         => 'required|date|after:start_time',
