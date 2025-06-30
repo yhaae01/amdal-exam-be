@@ -73,7 +73,7 @@ class ExamBatchController extends Controller
             foreach ($users as $userId) {
                 DB::table('exam_batch_users')->updateOrInsert(
                     [
-                        'exam_batch_id' => $batch->id,
+                        'exam_batch_id' => $id,
                         'user_id'       => $userId,
                     ],
                     [
@@ -87,7 +87,7 @@ class ExamBatchController extends Controller
             return apiResponse(null, 'Users successfully assigned to batch', true, 200);
         } catch (\Exception $e) {
             Log::error('Error while assigning user to batch: ' . $e->getMessage());
-            return apiResponse(null, $e->getMessage(), false, 500);
+            return apiResponse(null, "Gagal", false, 500);
         }
     }
 
