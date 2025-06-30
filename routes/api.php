@@ -40,8 +40,8 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/exam-submissions/{submission}', [ExamSubmissionController::class, 'show']); // Lihat detail ujian yang sudah dikerjakan
     Route::get('/my-submissions', [ExamSubmissionController::class, 'index']); // Daftar semua submission user
 
-    Route::get('/answers/list', [AnswerController::class, 'getAllAnswerUsers']);
     // ✏️ Jawaban user
+    Route::get('/answers/list', [AnswerController::class, 'getAllAnswerUsers']);
     Route::apiResource('answers', AnswerController::class)->only([
         'index', 'store', 'update', 'show'
     ]);
