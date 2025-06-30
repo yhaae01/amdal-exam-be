@@ -52,14 +52,14 @@ class ExamSeeder extends Seeder
         ]);
 
         $exam6 = Exam::create([
-            'title'       => 'Ujian Tenaga Teknis Programer Amdalnet',
-            'description' => 'Ujian Online untuk calon Tenaga Teknis Programer Amdalnet.',
+            'title'       => 'Ujian Tenaga Teknis Programmer Amdalnet',
+            'description' => 'Ujian Online untuk calon Tenaga Teknis Programmer Amdalnet.',
             'duration'    => 60
         ]);
 
         // Create Question and Option
         $question1 = Question::create([
-            'exam_id'       => $exam1->id,
+            'exam_id'       => $exam6->id,
             'question_text' => 'Apa itu Ujian Tenaga Teknis Uji Administrasi?',
             'question_type' => 'multiple_choice',
             'order'         => 1,
@@ -67,7 +67,7 @@ class ExamSeeder extends Seeder
         ]);
 
         $question2 = Question::create([
-            'exam_id'       => $exam1->id,
+            'exam_id'       => $exam6->id,
             'question_text' => 'Apa itu Tenaga Teknis Uji Administrasi?',
             'question_type' => 'multiple_choice',
             'order'         => 5,
@@ -75,7 +75,7 @@ class ExamSeeder extends Seeder
         ]);
 
         $question3 = Question::create([
-            'exam_id'       => $exam1->id,
+            'exam_id'       => $exam6->id,
             'question_text' => 'Siapa itu Dandun?',
             'question_type' => 'multiple_choice',
             'order'         => 6,
@@ -83,7 +83,7 @@ class ExamSeeder extends Seeder
         ]);
 
         $question4 = Question::create([
-            'exam_id'       => $exam1->id,
+            'exam_id'       => $exam6->id,
             'question_text' => 'Apakah dandun baik ?',
             'question_type' => 'multiple_choice',
             'order'         => 4,
@@ -91,7 +91,7 @@ class ExamSeeder extends Seeder
         ]);
 
         $question5 = Question::create([
-            'exam_id'       => $exam1->id,
+            'exam_id'       => $exam6->id,
             'question_text' => 'Dandun Ganteng ga ?',
             'question_type' => 'multiple_choice',
             'order'         => 2,
@@ -99,7 +99,7 @@ class ExamSeeder extends Seeder
         ]);
 
         $question6 = Question::create([
-            'exam_id'       => $exam1->id,
+            'exam_id'       => $exam6->id,
             'question_text' => 'Deskripsikan tentang dandun ?',
             'question_type' => 'essay',
             'order'         => 7,
@@ -107,7 +107,7 @@ class ExamSeeder extends Seeder
         ]);
 
         $question7 = Question::create([
-            'exam_id'       => $exam1->id,
+            'exam_id'       => $exam6->id,
             'question_text' => 'Apakah dandun cocok dengan mie ayam ?',
             'question_type' => 'essay',
             'order'         => 3,
@@ -242,23 +242,23 @@ class ExamSeeder extends Seeder
         ]);
 
         $user_exam1 = ExamBatchUser::create([
-            'exam_id' => null,
-            'exam_batch_id' => $exam_batch1->id,
+            'exam_id' => $exam1->id,
+            'exam_batch_id' => $exam_batch2->id,
             'user_id' => $user1->id
         ]);
 
         $user_exam2 = ExamBatchUser::create([
-            'exam_id' => $exam1->id,
-            'exam_batch_id' => $exam_batch2->id,
+            'exam_id' => $exam6->id,
+            'exam_batch_id' => $exam_batch1->id,
             'user_id' => $user2->id
         ]);
 
-        $submission = ExamSubmission::create([
-            'user_id'       => $user2->id,
-            'exam_id'       => $exam1->id,
-            'exam_batch_id' => $exam_batch2->id,
-            'started_at'    => now(), 
-        ]);
+        // $submission = ExamSubmission::create([
+        //     'user_id'       => $user2->id,
+        //     'exam_id'       => $exam1->id,
+        //     'exam_batch_id' => $exam_batch2->id,
+        //     'started_at'    => now(), 
+        // ]);
 
         // $examTitles = [
         //     'Ujian Tenaga Teknis Uji Administrasi' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi.',

@@ -64,7 +64,12 @@
                                 <a href="https://amdalnet.menlhk.go.id" target="_blank" style="color:#1a73e8; text-decoration:none;">amdalnet.menlhk.go.id</a>
                             </p>
 
-                            <p style="margin-top: 30px;">
+                            <p>
+                                Untuk mempersiapkan diri, Anda dapat membaca <strong>Panduan Pelaksanaan Ujian</strong> melalui tautan berikut:
+                                <a href="https://drive.google.com/drive/folders/19acIroGBU1zsX-WtZivcC319gQ3LKDVc" target="_blank" style="color:#1a73e8; text-decoration:underline;">Klik di sini untuk membuka panduan</a>.
+                            </p>
+
+                            <p style="margin-top: 40px;">
                                 Terima kasih,<br>
                                 <strong>Panitia Seleksi AMDALNET</strong>
                             </p>
