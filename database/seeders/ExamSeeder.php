@@ -57,158 +57,260 @@ class ExamSeeder extends Seeder
             'duration'    => 60
         ]);
 
+        $exam7 = Exam::create([
+            'title'       => 'Testing Ujian PDLUK',
+            'description' => 'Ujian Online untuk calon Testing.',
+            'duration'    => 60
+        ]);
+
         // Create Question and Option
-        // $question1 = Question::create([
-        //     'exam_id'       => $exam6->id,
-        //     'question_text' => 'Apa itu Ujian Tenaga Teknis Uji Administrasi?',
-        //     'question_type' => 'multiple_choice',
-        //     'order'         => 1,
-        //     'weight'        => 20
-        // ]);
+        $question1 = Question::create([
+            'exam_id'       => $exam7->id,
+            'question_text' => 'Apa itu Ujian Tenaga Teknis Uji Administrasi?',
+            'question_type' => 'multiple_choice',
+            'order'         => 1,
+            'weight'        => 20
+        ]);
 
-        // $question2 = Question::create([
-        //     'exam_id'       => $exam6->id,
-        //     'question_text' => 'Apa itu Tenaga Teknis Uji Administrasi?',
-        //     'question_type' => 'multiple_choice',
-        //     'order'         => 5,
-        //     'weight'        => 20
-        // ]);
+        $question2 = Question::create([
+            'exam_id'       => $exam7->id,
+            'question_text' => 'Apa itu Tenaga Teknis Uji Administrasi?',
+            'question_type' => 'multiple_choice',
+            'order'         => 5,
+            'weight'        => 20
+        ]);
 
-        // $question3 = Question::create([
-        //     'exam_id'       => $exam6->id,
-        //     'question_text' => 'Siapa itu Dandun?',
-        //     'question_type' => 'multiple_choice',
-        //     'order'         => 6,
-        //     'weight'        => 20
-        // ]);
+        $question3 = Question::create([
+            'exam_id'       => $exam7->id,
+            'question_text' => 'Siapa itu Dandun?',
+            'question_type' => 'multiple_choice',
+            'order'         => 6,
+            'weight'        => 20
+        ]);
 
-        // $question4 = Question::create([
-        //     'exam_id'       => $exam6->id,
-        //     'question_text' => 'Apakah dandun baik ?',
-        //     'question_type' => 'multiple_choice',
-        //     'order'         => 4,
-        //     'weight'        => 20
-        // ]);
+        $question4 = Question::create([
+            'exam_id'       => $exam7->id,
+            'question_text' => 'Apakah dandun baik ?',
+            'question_type' => 'multiple_choice',
+            'order'         => 4,
+            'weight'        => 20
+        ]);
 
-        // $question5 = Question::create([
-        //     'exam_id'       => $exam6->id,
-        //     'question_text' => 'Dandun Ganteng ga ?',
-        //     'question_type' => 'multiple_choice',
-        //     'order'         => 2,
-        //     'weight'        => 20
-        // ]);
+        $question5 = Question::create([
+            'exam_id'       => $exam7->id,
+            'question_text' => 'Dandun Ganteng ga ?',
+            'question_type' => 'multiple_choice',
+            'order'         => 2,
+            'weight'        => 20
+        ]);
 
-        // $question6 = Question::create([
-        //     'exam_id'       => $exam6->id,
-        //     'question_text' => 'Deskripsikan tentang dandun ?',
-        //     'question_type' => 'essay',
-        //     'order'         => 7,
-        //     'weight'        => 40
-        // ]);
+        $question6 = Question::create([
+            'exam_id'       => $exam7->id,
+            'question_text' => 'Deskripsikan tentang dandun ?',
+            'question_type' => 'essay',
+            'order'         => 7,
+            'weight'        => 40
+        ]);
 
-        // $question7 = Question::create([
-        //     'exam_id'       => $exam6->id,
-        //     'question_text' => 'Apakah dandun cocok dengan mie ayam ?',
-        //     'question_type' => 'essay',
-        //     'order'         => 3,
-        //     'weight'        => 40
-        // ]);
+        $question7 = Question::create([
+            'exam_id'       => $exam7->id,
+            'question_text' => 'Apakah dandun cocok dengan mie ayam ?',
+            'question_type' => 'essay',
+            'order'         => 3,
+            'weight'        => 40
+        ]);
 
-        // $option1 = Option::create([
-        //     'question_id' => $question1->id,
-        //     'option_text' => 'Ujian Tenaga Teknis Uji Administrasi',
-        //     'is_correct'  => true
-        // ]);
+        $option1 = Option::create([
+            'question_id' => $question1->id,
+            'option_text' => 'Ujian Tenaga Teknis Uji Administrasi',
+            'is_correct'  => true
+        ]);
 
-        // $option2 = Option::create([
-        //     'question_id' => $question1->id,
-        //     'option_text' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi.',
-        //     'is_correct'  => false
-        // ]);
+        $option2 = Option::create([
+            'question_id' => $question1->id,
+            'option_text' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi.',
+            'is_correct'  => false
+        ]);
 
-        // $option3 = Option::create([
-        //     'question_id' => $question1->id,
-        //     'option_text' => 'Tenaga Teknis Uji Administrasi',
-        //     'is_correct'  => false
-        // ]);
+        $option3 = Option::create([
+            'question_id' => $question1->id,
+            'option_text' => 'Tenaga Teknis Uji Administrasi',
+            'is_correct'  => false
+        ]);
 
-        // $option4 = Option::create([
-        //     'question_id' => $question1->id,
-        //     'option_text' => 'Tenaga Teknis Uji Administrasi uhuyyyyy.',
-        //     'is_correct'  => false
-        // ]);
+        $option4 = Option::create([
+            'question_id' => $question1->id,
+            'option_text' => 'Tenaga Teknis Uji Administrasi uhuyyyyy.',
+            'is_correct'  => false
+        ]);
 
-        // $option5 = Option::create([
-        //     'question_id' => $question2->id,
-        //     'option_text' => 'Tenaga Teknis Uji Administrasi.',
-        //     'is_correct'  => true
-        // ]);
+        $option5 = Option::create([
+            'question_id' => $question2->id,
+            'option_text' => 'Tenaga Teknis Uji Administrasi.',
+            'is_correct'  => true
+        ]);
 
-        // $option6 = Option::create([
-        //     'question_id' => $question2->id,
-        //     'option_text' => 'Ujian Tenaga Teknis Uji Administrasi.',
-        //     'is_correct'  => false
-        // ]);
+        $option6 = Option::create([
+            'question_id' => $question2->id,
+            'option_text' => 'Ujian Tenaga Teknis Uji Administrasi.',
+            'is_correct'  => false
+        ]);
 
-        // $option7 = Option::create([
-        //     'question_id' => $question2->id,
-        //     'option_text' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi.',
-        //     'is_correct'  => false
-        // ]);
+        $option7 = Option::create([
+            'question_id' => $question2->id,
+            'option_text' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi.',
+            'is_correct'  => false
+        ]);
 
-        // $option8 = Option::create([
-        //     'question_id' => $question2->id,
-        //     'option_text' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi Prikitiw',
-        //     'is_correct'  => false
-        // ]);
+        $option8 = Option::create([
+            'question_id' => $question2->id,
+            'option_text' => 'Ujian Online untuk calon Tenaga Teknis Uji Administrasi Prikitiw',
+            'is_correct'  => false
+        ]);
 
-        // $option9 = Option::create([
-        //     'question_id' => $question3->id,
-        //     'option_text' => 'Dandun',
-        //     'is_correct'  => true
-        // ]);
+        $option9 = Option::create([
+            'question_id' => $question3->id,
+            'option_text' => 'Dandun',
+            'is_correct'  => true
+        ]);
 
-        // $option10 = Option::create([
-        //     'question_id' => $question3->id,
-        //     'option_text' => 'Dandun Prikitiw',
-        //     'is_correct'  => false
-        // ]);
+        $option10 = Option::create([
+            'question_id' => $question3->id,
+            'option_text' => 'Dandun Prikitiw',
+            'is_correct'  => false
+        ]);
 
-        // $option11 = Option::create([
-        //     'question_id' => $question3->id,
-        //     'option_text' => 'Dandun Ganteng',
-        //     'is_correct'  => false
-        // ]);
+        $option11 = Option::create([
+            'question_id' => $question3->id,
+            'option_text' => 'Dandun Ganteng',
+            'is_correct'  => false
+        ]);
 
-        // $option12 = Option::create([
-        //     'question_id' => $question3->id,
-        //     'option_text' => 'Dandun Baik',
-        //     'is_correct'  => false
-        // ]);
+        $option12 = Option::create([
+            'question_id' => $question3->id,
+            'option_text' => 'Dandun Baik',
+            'is_correct'  => false
+        ]);
 
-        // $option13 = Option::create([
-        //     'question_id' => $question4->id,
-        //     'option_text' => 'Ya',
-        //     'is_correct'  => true
-        // ]);
+        $option13 = Option::create([
+            'question_id' => $question4->id,
+            'option_text' => 'Ya',
+            'is_correct'  => true
+        ]);
 
-        // $option14 = Option::create([
-        //     'question_id' => $question4->id,
-        //     'option_text' => 'Tidak',
-        //     'is_correct'  => false
-        // ]);
+        $option14 = Option::create([
+            'question_id' => $question4->id,
+            'option_text' => 'Tidak',
+            'is_correct'  => false
+        ]);
 
-        // $option15 = Option::create([
-        //     'question_id' => $question5->id,
-        //     'option_text' => 'Ya',
-        //     'is_correct'  => true
-        // ]);
+        $option15 = Option::create([
+            'question_id' => $question5->id,
+            'option_text' => 'Ya',
+            'is_correct'  => true
+        ]);
 
-        // $option16 = Option::create([
-        //     'question_id' => $question5->id,
-        //     'option_text' => 'Tidak',
-        //     'is_correct'  => false
-        // ]);
+        $option16 = Option::create([
+            'question_id' => $question5->id,
+            'option_text' => 'Tidak',
+            'is_correct'  => false
+        ]);
+        $question8 = Question::create([
+            'exam_id'       => $exam7->id,
+            'question_text' => 'Apa fungsi utama dari Tenaga Teknis Uji Administrasi?',
+            'question_type' => 'multiple_choice',
+            'order'         => 8,
+            'weight'        => 20
+        ]);
+
+        $option17 = Option::create([
+            'question_id' => $question8->id,
+            'option_text' => 'Melakukan pengujian administratif terhadap dokumen.',
+            'is_correct'  => true
+        ]);
+
+        $option18 = Option::create([
+            'question_id' => $question8->id,
+            'option_text' => 'Mengerjakan soal matematika.',
+            'is_correct'  => false
+        ]);
+
+        $option19 = Option::create([
+            'question_id' => $question8->id,
+            'option_text' => 'Menjadi MC dalam acara pemerintahan.',
+            'is_correct'  => false
+        ]);
+
+        $option20 = Option::create([
+            'question_id' => $question8->id,
+            'option_text' => 'Menilai lomba memasak antar OPD.',
+            'is_correct'  => false
+        ]);
+
+        $question9 = Question::create([
+            'exam_id'       => $exam7->id,
+            'question_text' => 'Apa yang harus dilakukan saat menemukan dokumen tidak valid?',
+            'question_type' => 'multiple_choice',
+            'order'         => 9,
+            'weight'        => 20
+        ]);
+
+        $option21 = Option::create([
+            'question_id' => $question9->id,
+            'option_text' => 'Melaporkan ke atasan atau tim verifikasi.',
+            'is_correct'  => true
+        ]);
+
+        $option22 = Option::create([
+            'question_id' => $question9->id,
+            'option_text' => 'Membuangnya diam-diam.',
+            'is_correct'  => false
+        ]);
+
+        $option23 = Option::create([
+            'question_id' => $question9->id,
+            'option_text' => 'Mengubah isinya agar valid.',
+            'is_correct'  => false
+        ]);
+
+        $option24 = Option::create([
+            'question_id' => $question9->id,
+            'option_text' => 'Mengabaikannya.',
+            'is_correct'  => false
+        ]);
+
+        $question10 = Question::create([
+            'exam_id'       => $exam7->id,
+            'question_text' => 'Apa peran teknologi dalam proses uji administrasi?',
+            'question_type' => 'multiple_choice',
+            'order'         => 10,
+            'weight'        => 20
+        ]);
+
+        $option25 = Option::create([
+            'question_id' => $question10->id,
+            'option_text' => 'Membantu digitalisasi, verifikasi cepat, dan efisiensi proses.',
+            'is_correct'  => true
+        ]);
+
+        $option26 = Option::create([
+            'question_id' => $question10->id,
+            'option_text' => 'Menambah beban kerja tenaga teknis.',
+            'is_correct'  => false
+        ]);
+
+        $option27 = Option::create([
+            'question_id' => $question10->id,
+            'option_text' => 'Digunakan hanya untuk komunikasi.',
+            'is_correct'  => false
+        ]);
+
+        $option28 = Option::create([
+            'question_id' => $question10->id,
+            'option_text' => 'Tidak memiliki pengaruh sama sekali.',
+            'is_correct'  => false
+        ]);
+
 
         // Add user in batch
         $exam_batch1 = ExamBatch::create([
