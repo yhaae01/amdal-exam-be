@@ -97,6 +97,17 @@ class UserController extends Controller
         }
     }
 
+    public function show($id) {
+        try {
+            $exam = User::findOrFail($id);
+            return apiResponse($exam, 'success in obtaining user', true, 200);
+        } catch (\Exception $e) {
+            Log::error('failed to retrieve user data: ' . $e->getMessage());
+    
+            return apiResponse(null, 'failed to retrieve user data.', false, 500);
+        }
+    }
+
     public function destroy($id)
     {
         try {
