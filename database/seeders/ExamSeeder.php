@@ -213,15 +213,15 @@ class ExamSeeder extends Seeder
         // Add user in batch
         $exam_batch1 = ExamBatch::create([
             'name'    => 'Batch 1',
-            'start_time' =>  Carbon::now('Asia/Jakarta'),
+            'start_time' => Carbon::now('Asia/Jakarta'),
             'end_time' => Carbon::now('Asia/Jakarta')->addMinutes(60),
             'max_participants' => 50
         ]);
 
         $exam_batch2 = ExamBatch::create([
             'name'    => 'Batch 2',
-            'start_time' => now()->addMinutes(60),
-            'end_time' => now()->addMinutes(120),
+            'start_time' => Carbon::now('Asia/Jakarta')->addMinutes(60),
+            'end_time' => Carbon::now('Asia/Jakarta')->addMinutes(120),
             'max_participants' => 50
         ]);
         
@@ -242,14 +242,14 @@ class ExamSeeder extends Seeder
         ]);
 
         $user_exam1 = ExamBatchUser::create([
-            'exam_id' => $exam1->id,
-            'exam_batch_id' => $exam_batch2->id,
+            'exam_id' => null,
+            'exam_batch_id' => $exam_batch1->id,
             'user_id' => $user1->id
         ]);
 
         $user_exam2 = ExamBatchUser::create([
-            'exam_id' => $exam6->id,
-            'exam_batch_id' => $exam_batch1->id,
+            'exam_id' => null,
+            'exam_batch_id' => $exam_batch2->id,
             'user_id' => $user2->id
         ]);
 
@@ -257,7 +257,7 @@ class ExamSeeder extends Seeder
         //     'user_id'       => $user2->id,
         //     'exam_id'       => $exam1->id,
         //     'exam_batch_id' => $exam_batch2->id,
-        //     'started_at'    => now(), 
+        //     // 'started_at'    => Carbon::now('Asia/Jakarta')->addMinutes(70), 
         // ]);
 
         // $examTitles = [
