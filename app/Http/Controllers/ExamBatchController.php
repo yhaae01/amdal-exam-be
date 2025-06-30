@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Models\User;
 use App\Models\ExamBatch;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+
 
 class ExamBatchController extends Controller
 {
@@ -56,21 +60,34 @@ class ExamBatchController extends Controller
         try {
             $batch = ExamBatch::findOrFail($id);
 
+            
             $validated = $request->validate([
                 'user_ids'   => 'required|array',
                 'user_ids.*' => 'exists:users,id'
             ]);
 
             $users = User::whereIn('id', $validated['user_ids'])
-                        ->where('role', 'user')
-                        ->pluck('id');
-
-            $batch->users()->syncWithoutDetaching($users);
+            ->where('role', 'user')
+            ->pluck('id');
+            
+            foreach ($users as $userId) {
+                DB::table('exam_batch_users')->updateOrInsert(
+                    [
+                        'exam_batch_id' => $batch->id,
+                        'user_id'       => $userId,
+                    ],
+                    [
+                        'id'         => (string) Str::uuid(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]
+                );
+            }
 
             return apiResponse(null, 'Users successfully assigned to batch', true, 200);
         } catch (\Exception $e) {
             Log::error('Error while assigning user to batch: ' . $e->getMessage());
-            return apiResponse(null, 'failed to assign user', false, 500);
+            return apiResponse(null, $e->getMessage(), false, 500);
         }
     }
 

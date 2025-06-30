@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -13,11 +14,8 @@ class ExamBatchUser extends Model
     protected $keyType = 'string';
     public $incrementing = false;
 
-    protected $fillable = [
-        'exam_batch_id',
-        'user_id',
-        'exam_id'
-    ];
+    protected $guarded = [];
+
 
     public function user()
     {
