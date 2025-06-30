@@ -163,4 +163,15 @@ class UserController extends Controller
             return apiResponse(null, 'Import failed', false, 500);
         }
     }
+
+    public function user_not_assign_batch()
+    {
+        try {
+            $users = User::whereDoesntHave('examBatchUsers')->get();
+            return apiResponse($users, 'user get successfully', true, 200);
+        } catch (\Exception $e) {
+            Log::error('Failed to get user: ' . $e->getMessage());
+            return apiResponse(null, 'failed to get user', false, 500);
+        }
+    }
 }
