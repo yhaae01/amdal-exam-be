@@ -63,6 +63,11 @@
                                 Informasi lebih lanjut mengenai pelaksanaan Tes Tertulis Online akan diumumkan pada portal berita terkini secara berkala melalui laman
                                 <a href="https://amdalnet.menlhk.go.id" target="_blank" style="color:#1a73e8; text-decoration:none;">amdalnet.menlhk.go.id</a>
                             </p>
+                            
+                            <p>
+                                Untuk mempersiapkan diri, Anda dapat membaca <strong>Panduan Pelaksanaan Ujian</strong> melalui tautan berikut:
+                                <a href="https://drive.google.com/drive/folders/19acIroGBU1zsX-WtZivcC319gQ3LKDVc" target="_blank" style="color:#1a73e8; text-decoration:underline;">Klik di sini untuk membuka panduan</a>.
+                            </p>
 
                             <p style="margin-top: 30px;">
                                 Terima kasih,<br>

@@ -25,13 +25,13 @@ class ExamBatch extends Model
         return $this->belongsToMany(User::class, 'exam_batch_users');
     }
 
-    public function exam()
-    {
-        return $this->belongsTo(Exam::class);
-    }
-
     public function examBatchUsers()
     {
         return $this->hasMany(ExamBatchUser::class);
+    }
+
+    public function exam()
+    {
+        return $this->belongsTo(Exam::class);
     }
 }

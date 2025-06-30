@@ -18,6 +18,7 @@ Route::post('/blast-email', [EmailBlastController::class, 'blastEmail']);
 Route::middleware(['auth:api'])->group(function () {
     // Get all exams with questions and user answers
     Route::get('/exams/all', [ExamController::class, 'getAllExams']);
+    Route::get('/exams/all/without-paginate', [ExamController::class, 'getAllExamsWithoutPaginate']);
     Route::get('/logout', [AuthController::class, 'logout']);
     Route::get('/me', [AuthController::class, 'me']);
 
@@ -46,6 +47,7 @@ Route::middleware(['auth:api'])->group(function () {
     ]);
 
     // 🗓️ Manajemen Batch Ujian
+    Route::get('/exam-batches/all', [ExamBatchController::class, 'all']);
     Route::get('/exam-batches', [ExamBatchController::class, 'index']);
     Route::post('/exam-batches', [ExamBatchController::class, 'store']);
     Route::get('/exam-batches/{id}', [ExamBatchController::class, 'show']);
@@ -54,7 +56,9 @@ Route::middleware(['auth:api'])->group(function () {
 
     // 👤 Manajemen User
     Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/not-submitted-yet/{id}', [UserController::class, 'user_not_submitted_yet']);
     Route::post('/users', [UserController::class, 'store']);
+    Route::get('/users/{id}', [UserController::class, 'show']);
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
     Route::post('/users/import', [UserController::class, 'import']);
