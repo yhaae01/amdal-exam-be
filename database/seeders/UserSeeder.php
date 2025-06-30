@@ -24,6 +24,22 @@ class UserSeeder extends Seeder
             'is_active' => true,
         ]);
 
+        User::create([
+            'name'      => 'Admin PDLUK',
+            'email'     => 'pbtpdluk@gmail.com',
+            'password'  => Hash::make('@mdal123'),
+            'role'      => 'admin',
+            'is_active' => true,
+        ]);
+
+        User::create([
+            'name'      => 'Admin 2 PDLUK',
+            'email'     => 'amdal@gmail.com',
+            'password'  => Hash::make('@mdal123'),
+            'role'      => 'admin',
+            'is_active' => true,
+        ]);
+
         // import users from Excel file
         // Excel::import(new UsersImport, database_path('seeders/data/template_peserta_ujian.xlsx'));
 
