@@ -56,7 +56,7 @@ Route::middleware(['auth:api'])->group(function () {
 
     // 👤 Manajemen User
     Route::get('/users', [UserController::class, 'index']);
-    Route::get('/users/not-submitted-yet/{id}', [UserController::class, 'user_not_submitted_yet']);
+    Route::get('/users/not-submitted-yet', [UserController::class, 'user_not_submitted_yet']);
     Route::post('/users', [UserController::class, 'store']);
     Route::get('/users/{id}', [UserController::class, 'show']);
     Route::put('/users/{id}', [UserController::class, 'update']);

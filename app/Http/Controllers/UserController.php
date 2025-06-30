@@ -121,7 +121,7 @@ class UserController extends Controller
         }
     }
 
-    public function user_not_submitted_yet($id)
+    public function user_not_submitted_yet()
     {
         try {
 
@@ -129,17 +129,14 @@ class UserController extends Controller
             ->join('users', 'users.id', '=', 'ebu.user_id')
             ->leftJoin('exam_submissions', 'exam_submissions.user_id', '=', 'ebu.user_id')
             ->whereNull('exam_submissions.submitted_at')
-            ->where('ebu.exam_batch_id', $id)
             ->select(
                 'users.id',
                 'users.name',
                 'users.email',
-                'ebu.exam_id',
-                'ebu.exam_batch_id',
                 'exam_submissions.submitted_at'
             )
             ->distinct()
-            ->get();
+            ->paginate(20);
 
             return apiResponse($users, 'user get successfully', true, 200);
         } catch (\Exception $e) {
