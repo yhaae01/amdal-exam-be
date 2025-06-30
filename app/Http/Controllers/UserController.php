@@ -167,7 +167,7 @@ class UserController extends Controller
     public function user_not_assign_batch()
     {
         try {
-            $users = User::whereDoesntHave('examBatchUsers')->get();
+            $users = User::whereDoesntHave('examBatchUsers')->where('role', 'user')->get();
             return apiResponse($users, 'user get successfully', true, 200);
         } catch (\Exception $e) {
             Log::error('Failed to get user: ' . $e->getMessage());
