@@ -31,4 +31,9 @@ class ExamSubmission extends Model
     {
         return $this->belongsTo(Exam::class);
     }
+
+    public function activityUsers()
+    {
+        return $this->hasMany(ActivityUser::class);
+    }
 }

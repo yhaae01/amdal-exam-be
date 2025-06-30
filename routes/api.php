@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
@@ -47,6 +48,10 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/exam-batches/all', [ExamBatchController::class, 'all']);
     Route::get('/exam-batches', [ExamBatchController::class, 'index']);
     Route::get('/exam-batches/{id}', [ExamBatchController::class, 'show']);
+
+    // Activity User
+    Route::post('/activity', [ActivityController::class, 'addActivity']);
+    Route::get('/count-activity', [ActivityController::class, 'checkCountActivity']);
 
     Route::group(['middleware' => ['is.admin']], function () {
         // 🗓️ Manajemen Batch Ujian
