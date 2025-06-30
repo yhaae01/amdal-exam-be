@@ -62,4 +62,5 @@ Route::middleware(['auth:api'])->group(function () {
     Route::put('/users/{id}', [UserController::class, 'update']);
     Route::delete('/users/{id}', [UserController::class, 'destroy']);
     Route::post('/users/import', [UserController::class, 'import']);
+    Route::get('/users/not-assign-batch', [UserController::class, 'user_not_assign_batch']);
 });
