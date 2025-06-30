@@ -85,4 +85,9 @@ class User extends Authenticatable implements JWTSubject
     {
         return $this->hasOne(ExamBatchUser::class);
     }
+
+    public function activityUsers()
+    {
+        return $this->hasMany(ActivityUser::class);
+    }
 }
