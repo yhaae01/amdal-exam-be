@@ -240,6 +240,70 @@ class ExamSeeder extends Seeder
             'role'      => 'user',
             'is_active' => true,
         ]);
+        
+        $user3 = User::create([
+            'name'      => 'User 3',
+            'email'     => 'user3@example.com',
+            'password'  => Hash::make('password'),
+            'role'      => 'user',
+            'is_active' => true,
+        ]);
+
+        $user4 = User::create([
+            'name'      => 'User 4',
+            'email'     => 'user4@example.com',
+            'password'  => Hash::make('password'),
+            'role'      => 'user',
+            'is_active' => true,
+        ]);
+
+        $user5 = User::create([
+            'name'      => 'User 5',
+            'email'     => 'user5@example.com',
+            'password'  => Hash::make('password'),
+            'role'      => 'user',
+            'is_active' => true,
+        ]);
+
+        $user6 = User::create([
+            'name'      => 'User 6',
+            'email'     => 'user6@example.com',
+            'password'  => Hash::make('password'),
+            'role'      => 'user',
+            'is_active' => true,
+        ]);
+
+        $user7 = User::create([
+            'name'      => 'User 7',
+            'email'     => 'user7@example.com',
+            'password'  => Hash::make('password'),
+            'role'      => 'user',
+            'is_active' => true,
+        ]);
+
+        $user8 = User::create([
+            'name'      => 'User 8',
+            'email'     => 'user8@example.com',
+            'password'  => Hash::make('password'),
+            'role'      => 'user',
+            'is_active' => true,
+        ]);
+
+        $user9 = User::create([
+            'name'      => 'User 9',
+            'email'     => 'user9@example.com',
+            'password'  => Hash::make('password'),
+            'role'      => 'user',
+            'is_active' => true,
+        ]);
+
+        $user10 = User::create([
+            'name'      => 'User 10',
+            'email'     => 'user10@example.com',
+            'password'  => Hash::make('password'),
+            'role'      => 'user',
+            'is_active' => true,
+        ]);
 
         $user_exam1 = ExamBatchUser::create([
             'exam_id' => null,
@@ -251,6 +315,54 @@ class ExamSeeder extends Seeder
             'exam_id' => null,
             'exam_batch_id' => $exam_batch2->id,
             'user_id' => $user2->id
+        ]);
+
+        $user_exam3 = ExamBatchUser::create([
+            'exam_id' => null,
+            'exam_batch_id' => $exam_batch1->id,
+            'user_id' => $user3->id
+        ]);
+
+        $user_exam4 = ExamBatchUser::create([
+            'exam_id' => null,
+            'exam_batch_id' => $exam_batch1->id,
+            'user_id' => $user4->id
+        ]);
+
+        $user_exam5 = ExamBatchUser::create([
+            'exam_id' => null,
+            'exam_batch_id' => $exam_batch1->id,
+            'user_id' => $user5->id
+        ]);
+
+        $user_exam6 = ExamBatchUser::create([
+            'exam_id' => null,
+            'exam_batch_id' => $exam_batch1->id,
+            'user_id' => $user6->id
+        ]);
+
+        $user_exam7 = ExamBatchUser::create([
+            'exam_id' => null,
+            'exam_batch_id' => $exam_batch1->id,
+            'user_id' => $user7->id
+        ]);
+
+        $user_exam8 = ExamBatchUser::create([
+            'exam_id' => null,
+            'exam_batch_id' => $exam_batch1->id,
+            'user_id' => $user8->id
+        ]);
+
+        $user_exam9 = ExamBatchUser::create([
+            'exam_id' => null,
+            'exam_batch_id' => $exam_batch1->id,
+            'user_id' => $user9->id
+        ]);
+
+        $user_exam10 = ExamBatchUser::create([
+            'exam_id' => null,
+            'exam_batch_id' => $exam_batch1->id,
+            'user_id' => $user10->id
         ]);
 
         // $submission = ExamSubmission::create([
