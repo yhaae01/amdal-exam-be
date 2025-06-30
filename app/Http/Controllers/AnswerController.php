@@ -61,7 +61,7 @@ class AnswerController extends Controller
         } catch (\Exception $e) {
             Log::error('Failed to save answer: ' . $e->getMessage());
 
-            return apiResponse(null, 'failed to save answer', false, 500);
+            return apiResponse($e->getMessage(), 'failed to save answer', false, 500);
         }
     }
 
@@ -108,7 +108,7 @@ class AnswerController extends Controller
             return apiResponse($answers, 'success in obtaining answers', true, 200);
         } catch (\Exception $e) {
             Log::error('Failed to get answers: ' . $e->getMessage());
-            return apiResponse(null, 'failed to get answers', false, 500);
+            return apiResponse($e->getMessage(), 'failed to get answers', false, 500);
         }
     }
 }

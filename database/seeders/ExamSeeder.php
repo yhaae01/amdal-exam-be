@@ -243,7 +243,7 @@ class ExamSeeder extends Seeder
 
         $user_exam1 = ExamBatchUser::create([
             'exam_id' => null,
-            'exam_batch_id' => $exam_batch2->id,
+            'exam_batch_id' => $exam_batch1->id,
             'user_id' => $user1->id
         ]);
 
