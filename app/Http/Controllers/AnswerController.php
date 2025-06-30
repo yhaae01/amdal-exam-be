@@ -104,7 +104,11 @@ class AnswerController extends Controller
     public function getAllAnswerUsers()
     {
         try {
-            $answers = Answer::with(['question', 'selectedOption', 'examSubmission' => function ($q) { $q->where('user_id', auth()->user()->id); }])->get();
+            $answers = Answer::with(['question', 'selectedOption', 'examSubmission'])
+                ->whereHas('examSubmission', function ($q) {
+                    $q->where('user_id', auth()->id());
+                })
+                ->get();
             return apiResponse($answers, 'success in obtaining answers', true, 200);
         } catch (\Exception $e) {
             Log::error('Failed to get answers: ' . $e->getMessage());
