@@ -11,7 +11,8 @@ class OptionController extends Controller
 {
     public function index(Request $request)
     {
-        $search = $request->query('search'); // ambil query param `?search=...`
+        $search = $request->query('search');
+        $perPage = $request->query('per_page', 10);
 
         $options = Option::with('question')
             ->when($search, function ($query, $search) {
@@ -20,9 +21,9 @@ class OptionController extends Controller
                         $q->where('question_text', 'ILIKE', "%{$search}%");
                     });
             })
-            ->get();
+            ->paginate(10);
 
-        $data = $options->map(function ($option) {
+        $data = $options->getCollection()->map(function ($option) {
             return [
                 'id'            => $option->id,
                 'option_text'   => $option->option_text,
@@ -31,7 +32,9 @@ class OptionController extends Controller
             ];
         });
 
-        return apiResponse($data, 'Success get options with question text', true, 200);
+        $options->setCollection($data);
+        return apiResponse($options, 'Success get options with question text', true, 200);
+
     }
 
 
