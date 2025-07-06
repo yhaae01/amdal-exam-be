@@ -15,6 +15,8 @@ use App\Http\Controllers\ExamSubmissionController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
+Route::get('/result-qualified', [UserController::class, 'result_qualified']);
+
 Route::middleware(['auth:api'])->group(function () {
     // Get all exams with questions and user answers
     Route::get('/exams/all', [ExamController::class, 'getAllExams']);
