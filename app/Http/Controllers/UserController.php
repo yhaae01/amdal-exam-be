@@ -238,7 +238,8 @@ class UserController extends Controller
                 LEFT JOIN options AS selected_option ON answers.selected_option_id = selected_option.id
                 WHERE users.is_qualified = true
                 AND (
-                    users.nik ILIKE
+                    users.nik ILIKE ?
+                    OR users.email ILIKE ?
                 )
                 GROUP BY
                     users.id,
