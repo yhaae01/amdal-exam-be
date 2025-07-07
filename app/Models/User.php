@@ -91,6 +91,16 @@ class User extends Authenticatable implements JWTSubject
         return $this->hasOne(Exam::class);
     }
 
+    public function examBatchUser()
+    {
+        return $this->hasOne(ExamBatchUser::class, 'user_id', 'id');
+    }
+
+    public function exam()
+    {
+        return $this->hasOneThrough(Exam::class, ExamBatchUser::class, 'user_id', 'id', 'id', 'exam_id');
+    }
+
     public function activityUsers()
     {
         return $this->hasMany(ActivityUser::class);

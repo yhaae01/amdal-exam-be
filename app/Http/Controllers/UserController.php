@@ -270,8 +270,7 @@ class UserController extends Controller
                 // Cari user berdasarkan nik dan pastikan dia qualified
                 $qualifiedUser = User::where('nik', $nik)
                     ->where('is_qualified', true)
-                    ->with('submissions')
-                    ->with(['submissions', 'exams'])
+                    ->with(['submissions', 'examBatchUser', 'exam'])
                     ->first();
 
                 if ($qualifiedUser) {
@@ -284,7 +283,7 @@ class UserController extends Controller
                     }
 
                     // Menambahkan judul dari exam jika ada
-                    $examTitle = $qualifiedUser->exams ? $qualifiedUser->exams->title : null;
+                    $examTitle = $qualifiedUser->exam ? $qualifiedUser->exam->title : null;
 
                     // Jika user ditemukan, qualified, memiliki exam submissions, dan title exam
                     return apiResponse([
