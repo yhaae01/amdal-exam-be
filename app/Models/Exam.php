@@ -38,6 +38,6 @@ class Exam extends Model
 
     public function examBatchUsers()
     {
-        return $this->hasMany(ExamBatchUser::class);
+        return $this->hasMany(ExamBatchUser::class, 'exam_id', 'id');
     }
 }

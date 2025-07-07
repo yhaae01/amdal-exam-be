@@ -29,6 +29,6 @@ class ExamBatchUser extends Model
     
     public function exam()
     {
-        return $this->belongsTo(Exam::class);
+        return $this->belongsTo(Exam::class, 'exam_id');
     }
 }

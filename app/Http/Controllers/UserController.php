@@ -270,21 +270,23 @@ class UserController extends Controller
                 // Cari user berdasarkan nik dan pastikan dia qualified
                 $qualifiedUser = User::where('nik', $nik)
                     ->where('is_qualified', true)
-                    ->with(['submissions', 'examBatchUser', 'exam'])
+                    ->with(['submissions', 'examBatchUser.exam'])  // Eager load relasi submissions dan exam melalui examBatchUser
                     ->first();
-
+    
                 if ($qualifiedUser) {
                     // Cek apakah user memiliki relasi dengan submissions
                     $submissions = $qualifiedUser->submissions;
-
+    
                     if ($submissions->isEmpty()) {
                         // Jika user tidak memiliki relasi dengan exam submissions
                         return apiResponse(null, 'doesnt-have-exam-submissions', false, 404);
                     }
-
+    
                     // Menambahkan judul dari exam jika ada
-                    $examTitle = $qualifiedUser->exam ? $qualifiedUser->exam->title : null;
-
+                    $examTitle = $qualifiedUser->examBatchUser && $qualifiedUser->examBatchUser->exam 
+                        ? $qualifiedUser->examBatchUser->exam->title 
+                        : null;
+    
                     // Jika user ditemukan, qualified, memiliki exam submissions, dan title exam
                     return apiResponse([
                         'user'       => $qualifiedUser,
