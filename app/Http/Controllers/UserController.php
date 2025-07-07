@@ -186,7 +186,7 @@ class UserController extends Controller
                 ], 400);
             }
 
-            $results = $results = DB::select("
+            $results = DB::select("
                 SELECT
                     users.name,
                     users.nik,
@@ -237,10 +237,7 @@ class UserController extends Controller
                 JOIN questions ON answers.question_id = questions.id
                 LEFT JOIN options AS selected_option ON answers.selected_option_id = selected_option.id
                 WHERE users.is_qualified = true
-                AND (
-                    users.nik ILIKE ?
-                    OR users.email ILIKE ?
-                )
+                AND users.nik ILIKE ?
                 GROUP BY
                     users.id,
                     exams.title,
@@ -255,7 +252,7 @@ class UserController extends Controller
                     total_score_fix DESC,
                     EXTRACT(EPOCH FROM (exam_submissions.submitted_at - exam_submissions.started_at)) ASC
             ", [
-                "%$keyword%", "%$keyword%"
+                "%$keyword%"
             ]);
 
             return apiResponse($results, 'user get successfully', true, 200);
