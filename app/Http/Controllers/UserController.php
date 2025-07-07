@@ -266,39 +266,41 @@ class UserController extends Controller
         try {
             // Cek apakah nik ada di query string atau di body request
             $nik = $request->input('nik') ?? $request->query('nik');
-            if ($nik) {
-                // Cari user berdasarkan nik dan pastikan dia qualified
-                $qualifiedUser = User::where('nik', $nik)
-                    ->where('is_qualified', true)
-                    ->with(['submissions', 'examBatchUser.exam'])  // Eager load relasi submissions dan exam melalui examBatchUser
-                    ->first();
-    
-                if ($qualifiedUser) {
-                    // Cek apakah user memiliki relasi dengan submissions
-                    $submissions = $qualifiedUser->submissions;
-    
-                    if ($submissions->isEmpty()) {
-                        // Jika user tidak memiliki relasi dengan exam submissions
-                        return apiResponse(null, 'doesnt-have-exam-submissions', true, 200);
-                    }
-    
-                    // Menambahkan judul dari exam jika ada
-                    $examTitle = $qualifiedUser->examBatchUser && $qualifiedUser->examBatchUser->exam 
-                        ? $qualifiedUser->examBatchUser->exam->title 
-                        : null;
-    
-                    // Jika user ditemukan, qualified, memiliki exam submissions, dan title exam
-                    return apiResponse([
-                        'user'       => $qualifiedUser,
-                        'exam_title' => $examTitle,
-                    ], 'user-qualified', true, 200);
-                } else {
-                    // Jika nik ditemukan tapi user tidak qualified atau tidak ditemukan
-                    return apiResponse(null, 'not-qualified', true, 200);
+
+            // Cek apakah nik tidak diberikan atau kosong
+            if (empty($nik)) {
+                return apiResponse(null, 'nik-not-provided', true, 200);  // Respons jika nik tidak diberikan
+            }
+
+            // Cari user berdasarkan nik dan pastikan dia qualified
+            $qualifiedUser = User::where('nik', $nik)
+                ->where('is_qualified', true)
+                ->with(['submissions', 'examBatchUser.exam'])  // Eager load relasi submissions dan exam melalui examBatchUser
+                ->first();
+
+            // Jika user ditemukan
+            if ($qualifiedUser) {
+                // Cek apakah user memiliki relasi dengan submissions
+                $submissions = $qualifiedUser->submissions;
+
+                if ($submissions->isEmpty()) {
+                    // Jika user tidak memiliki relasi dengan exam submissions
+                    return apiResponse(null, 'doesnt-have-exam-submissions', true, 200);
                 }
+
+                // Menambahkan judul dari exam jika ada
+                $examTitle = $qualifiedUser->examBatchUser && $qualifiedUser->examBatchUser->exam 
+                    ? $qualifiedUser->examBatchUser->exam->title 
+                    : null;
+
+                // Jika user ditemukan, qualified, memiliki exam submissions, dan title exam
+                return apiResponse([
+                    'user'       => $qualifiedUser,
+                    'exam_title' => $examTitle,
+                ], 'user-qualified', true, 200);
             } else {
-                // Jika nik tidak diberikan atau kosong
-                return apiResponse(null, 'nik-not-found', true, 200);
+                // Jika nik tidak ditemukan atau user tidak qualified
+                return apiResponse(null, 'not-qualified', true, 200);
             }
         } catch (\Exception $e) {
             Log::error('Failed to get qualified users: ' . $e->getMessage());
