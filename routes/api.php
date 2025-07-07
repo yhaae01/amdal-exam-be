@@ -14,8 +14,10 @@ use App\Http\Controllers\EmailBlastController;
 use App\Http\Controllers\ExamSubmissionController;
 
 Route::post('/login', [AuthController::class, 'login']);
+Route::get('/get-users', [UserController::class, 'index']);
 
 Route::get('/result-qualified', [UserController::class, 'result_qualified']);
+Route::get('/get-qualified', [UserController::class, 'getQualified']);
 
 Route::middleware(['auth:api'])->group(function () {
     // Get all exams with questions and user answers

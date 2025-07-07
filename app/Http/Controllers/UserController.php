@@ -261,4 +261,47 @@ class UserController extends Controller
             return apiResponse(null, $e->getMessage(), false, 500);
         }
     }
+    public function getQualified(Request $request)
+    {
+        try {
+            // Cek apakah nik ada di query string atau di body request
+            $nik = $request->input('nik') ?? $request->query('nik');
+            if ($nik) {
+                // Cari user berdasarkan nik dan pastikan dia qualified
+                $qualifiedUser = User::where('nik', $nik)
+                    ->where('is_qualified', true)
+                    ->with('submissions')
+                    ->with(['submissions', 'exams'])
+                    ->first();
+
+                if ($qualifiedUser) {
+                    // Cek apakah user memiliki relasi dengan submissions
+                    $submissions = $qualifiedUser->submissions;
+
+                    if ($submissions->isEmpty()) {
+                        // Jika user tidak memiliki relasi dengan exam submissions
+                        return apiResponse(null, 'doesnt-have-exam-submissions', false, 404);
+                    }
+
+                    // Menambahkan judul dari exam jika ada
+                    $examTitle = $qualifiedUser->exams ? $qualifiedUser->exams->title : null;
+
+                    // Jika user ditemukan, qualified, memiliki exam submissions, dan title exam
+                    return apiResponse([
+                        'user'       => $qualifiedUser,
+                        'exam_title' => $examTitle,
+                    ], 'user-found', true, 200);
+                } else {
+                    // Jika nik ditemukan tapi user tidak qualified atau tidak ditemukan
+                    return apiResponse(null, 'not-registered', false, 404);
+                }
+            } else {
+                // Jika nik tidak diberikan atau kosong, berikan pesan atau hindari pencarian data
+                return apiResponse(null, 'nik-not-provided', false, 400);
+            }
+        } catch (\Exception $e) {
+            Log::error('Failed to get qualified users: ' . $e->getMessage());
+            return apiResponse(null, 'failed to retrieve qualified users', false, 500);
+        }
+    }
 }

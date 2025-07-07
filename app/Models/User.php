@@ -63,7 +63,7 @@ class User extends Authenticatable implements JWTSubject
 
     public function submissions()
     {
-        return $this->hasMany(ExamSubmission::class);
+        return $this->hasMany(ExamSubmission::class, 'user_id', 'id');
     }
 
     public function examBatches()
@@ -84,6 +84,11 @@ class User extends Authenticatable implements JWTSubject
     public function examBatchUsers()
     {
         return $this->hasOne(ExamBatchUser::class);
+    }
+    
+    public function exams()
+    {
+        return $this->hasOne(Exam::class);
     }
 
     public function activityUsers()
