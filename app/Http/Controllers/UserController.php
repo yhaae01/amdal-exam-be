@@ -279,7 +279,7 @@ class UserController extends Controller
     
                     if ($submissions->isEmpty()) {
                         // Jika user tidak memiliki relasi dengan exam submissions
-                        return apiResponse(null, 'doesnt-have-exam-submissions', false, 404);
+                        return apiResponse(null, 'doesnt-have-exam-submissions', true, 200);
                     }
     
                     // Menambahkan judul dari exam jika ada
@@ -294,11 +294,11 @@ class UserController extends Controller
                     ], 'user-qualified', true, 200);
                 } else {
                     // Jika nik ditemukan tapi user tidak qualified atau tidak ditemukan
-                    return apiResponse(null, 'not-qualified', false, 404);
+                    return apiResponse(null, 'not-qualified', true, 200);
                 }
             } else {
                 // Jika nik tidak diberikan atau kosong
-                return apiResponse(null, 'nik-not-found', false, 400);
+                return apiResponse(null, 'nik-not-found', true, 200);
             }
         } catch (\Exception $e) {
             Log::error('Failed to get qualified users: ' . $e->getMessage());
