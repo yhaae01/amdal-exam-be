@@ -255,7 +255,7 @@ class UserController extends Controller
                     total_score_fix DESC,
                     EXTRACT(EPOCH FROM (exam_submissions.submitted_at - exam_submissions.started_at)) ASC
             ", [
-                "%$keyword%"
+                "%$keyword%", "%$keyword%"
             ]);
 
             return apiResponse($results, 'user get successfully', true, 200);
