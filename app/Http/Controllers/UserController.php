@@ -272,6 +272,13 @@ class UserController extends Controller
                 return apiResponse(null, 'nik-not-provided', true, 200);  // Respons jika nik tidak diberikan
             }
 
+            // checkh user if exist
+            $user = User::where('nik', $nik)->first();
+
+            if (!$user) {
+                return apiResponse(null, 'nik-not-provided', true, 200); 
+            }
+
             // Cari user berdasarkan nik dan pastikan dia qualified
             $qualifiedUser = User::where('nik', $nik)
                 ->where('is_qualified', true)
