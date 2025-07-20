@@ -7,6 +7,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ExamController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OptionController;
 use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\ExamBatchController;
@@ -16,7 +17,7 @@ use App\Http\Controllers\ExamSubmissionController;
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/get-users', [UserController::class, 'index']);
 
-Route::get('/result-qualified', [UserController::class, 'result_qualified']);
+// Alternate
 Route::get('/get-qualified', [UserController::class, 'getQualified']);
 
 Route::middleware(['auth:api'])->group(function () {
@@ -58,10 +59,18 @@ Route::middleware(['auth:api'])->group(function () {
     Route::get('/count-activity', [ActivityController::class, 'checkCountActivity']);
 
     Route::group(['middleware' => ['is.admin']], function () {
+
+        Route::get('/dashboard-highlight', [DashboardController::class, 'index']);
+        Route::get('/top-score', [DashboardController::class, 'top_score_exam']);
+        Route::get('/batch-highlight', [DashboardController::class, 'current_batch_list']);
+
         // 🗓️ Manajemen Batch Ujian
         Route::post('/exam-batches', [ExamBatchController::class, 'store']);
         Route::delete('/exam-batches/{id}', [ExamBatchController::class, 'destroy']);
         Route::post('/exam-batches/{id}/assign-users', [ExamBatchController::class, 'assignUsers']);
+
+        Route::get('/result-qualified', [UserController::class, 'result_qualified']);
+        Route::get('/export-result-qualified', [UserController::class, 'export_result_qualified']);
 
         // 👤 Manajemen User
         Route::get('/users', [UserController::class, 'index']);

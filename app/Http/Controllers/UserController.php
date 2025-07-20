@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Imports\UsersImport;
 use Illuminate\Http\Request;
+use App\Exports\ExamResultExport;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
@@ -22,9 +23,9 @@ class UserController extends Controller
 
             if ($search) {
                 $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', '%' . $search . '%')
-                        ->orWhere('email', 'like', '%' . $search . '%')
-                        ->orWhere('role', 'like', '%' . $search . '%');
+                    $q->where('name', 'ilike', '%' . $search . '%')
+                        ->orWhere('email', 'ilike', '%' . $search . '%')
+                        ->orWhere('role', 'ilike', '%' . $search . '%');
                 });
             }
 
@@ -167,7 +168,7 @@ class UserController extends Controller
     public function user_not_assign_batch()
     {
         try {
-            $users = User::whereDoesntHave('examBatchUsers')->where('role', 'user')->get();
+            $users = User::whereDoesntHave('examBatchUsers')->where('role', 'user')->paginate(10);
             return apiResponse($users, 'user get successfully', true, 200);
         } catch (\Exception $e) {
             Log::error('Failed to get user: ' . $e->getMessage());
@@ -175,21 +176,33 @@ class UserController extends Controller
         }
     }
 
+    public function export_result_qualified(Request $request) {
+        try {
+            $keyword = $request->query('search');
+            $year = $request->query('year', 2025);
+            $title = $request->query('title');
+
+            return Excel::download(new ExamResultExport($keyword, $year, $title), 'exam_ranking.xlsx');
+        } catch (\Exception $e) {
+            Log::error('Failed to get user: ' . $e->getMessage());
+            return apiResponse(null, $e->getMessage(), false, 500);
+        }
+    }
+
     public function result_qualified(Request $request)
     {
         try {
-            $keyword = $request->query('u');
+            $keyword = $request->query('search');
 
-            if (!$keyword) {
-                return response()->json([
-                    'message' => 'Keyword is required',
-                ], 400);
-            }
+            $year = $request->query('year');
+            $title = $request->query('title');
 
-            $results = DB::select("
+            $limit = $request->query('limit');
+
+            $query = "
                 SELECT
                     users.name,
-                    users.nik,
+                    users.email,
                     exams.title,
                     exam_submissions.started_at,
                     users.is_qualified,
@@ -236,12 +249,22 @@ class UserController extends Controller
                 JOIN answers ON exam_submissions.id = answers.exam_submission_id
                 JOIN questions ON answers.question_id = questions.id
                 LEFT JOIN options AS selected_option ON answers.selected_option_id = selected_option.id
-                WHERE users.is_qualified = true
-                AND users.nik ILIKE ?
+                WHERE users.email ILIKE ?
+                AND EXTRACT(YEAR FROM exam_submissions.started_at) = ?
+            ";
+
+            $params = ["%$keyword%", $year];
+
+            if (!empty($title)) {
+                $query .= " AND exams.title ILIKE ? ";
+                $params[] = "%$title%";
+            }
+
+            $query .= "
                 GROUP BY
                     users.id,
                     exams.title,
-                    users.nik,
+                    users.email,
                     users.name,
                     exam_submissions.id,
                     exam_submissions.submitted_at,
@@ -251,9 +274,14 @@ class UserController extends Controller
                 ORDER BY
                     total_score_fix DESC,
                     EXTRACT(EPOCH FROM (exam_submissions.submitted_at - exam_submissions.started_at)) ASC
-            ", [
-                "%$keyword%"
-            ]);
+            ";
+
+            if (!empty($limit)) {
+                $query .= " LIMIT ? ";
+                $params[] = (int) $limit;
+            }
+
+            $results = DB::select($query, $params);
 
             return apiResponse($results, 'user get successfully', true, 200);
         } catch (\Exception $e) {

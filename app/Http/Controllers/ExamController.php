@@ -20,7 +20,7 @@ class ExamController extends Controller
     {
         try {
              // tidak difilter user
-            $isAdmin = auth()->user()->role === 'admin';
+            $isAdmin = auth()->guard()->user()->role === 'admin';
 
             // $with = [
             //     // 'questions.options',
@@ -64,6 +64,10 @@ class ExamController extends Controller
             if ($search) {
                 $query->where('title', 'like', '%' . $search . '%')
                     ->orWhere('description', 'like', '%' . $search . '%');
+            }
+
+            if ($request->has('year') && is_numeric($request->year)) {
+                $query->whereYear('created_at', $request->year);
             }
 
             // $exams = $isAdmin ? $query->paginate(10) : $query->get();
@@ -119,7 +123,7 @@ class ExamController extends Controller
                 'questions.options',
                 'questions.answers' => function ($q) {
                     $q->whereHas('examSubmission', function ($q2) {
-                        $q2->where('user_id', auth()->id());
+                        $q2->where('user_id', auth()->guard()->id());
                     });
                 }
             ])->findOrFail($id);

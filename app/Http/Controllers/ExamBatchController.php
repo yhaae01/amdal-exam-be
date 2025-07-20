@@ -15,7 +15,7 @@ class ExamBatchController extends Controller
 {
     public function index()
     {
-        if (auth()->user()->role !== 'admin') {
+        if (auth()->guard()->user()->role !== 'admin') {
             return apiResponse(null, 'Forbidden', false, 403);
         }
 
@@ -24,15 +24,20 @@ class ExamBatchController extends Controller
         return apiResponse($examBatches, 'success in obtaining batches', true, 200);
     }
 
-    public function all()
+    public function all(Request $request)
     {
-        if (auth()->user()->role !== 'admin') {
+        if (auth()->guard()->user()->role !== 'admin') {
             return apiResponse(null, 'Forbidden', false, 403);
         }
 
-        $examBatches = ExamBatch::all();
+        $examBatches = ExamBatch::query();
 
-        return apiResponse($examBatches, 'success in obtaining batches', true, 200);
+        if ($request->has('year') && is_numeric($request->year)) {
+            $examBatches->whereYear('start_time', $request->year);
+        }
+
+        $data = $examBatches->get();
+        return apiResponse($data, 'success in obtaining batches', true, 200);
     }
 
     public function store(Request $request)
